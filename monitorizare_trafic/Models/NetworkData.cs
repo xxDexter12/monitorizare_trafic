@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace monitorizare_trafic.Models
 {
-    internal class NetworkData
+    public class NetworkData
     {
         public string SourceIP { get; set; }
         public string DestinationIP { get; set; }
