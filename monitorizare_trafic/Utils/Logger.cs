@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace monitorizare_trafic.Utils
 {
-    internal class Logger
+    public class Logger
     {
+        public void Log(string message)
+        {
+            // Cod pentru logarea mesajelor
+        }
     }
 }

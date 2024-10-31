@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace monitorizare_trafic.Utils
 {
-    internal class Manager
+    public class Manager
     {
+        public string GetConnectionString()
+        {
+            // Cod pentru obținerea stringului de conexiune
+            return "YourConnectionString";
+        }
     }
 }
