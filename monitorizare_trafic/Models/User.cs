@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace monitorizare_trafic.Models
 {
-    internal class User
+    public class User
     {
+        public int UserId { get; set; }
+        public string UserName { get; set; }
+        public string Role { get; set; }
     }
 }
