@@ -6,11 +6,7 @@ using System.Threading.Tasks;
 
 namespace monitorizare_trafic.Models
 {
-    public class SuspiciousActivity
+    internal class SuspiciousActivity
     {
-        public int Id { get; set; }
-        public string ActivityType { get; set; }
-        public DateTime DetectedAt { get; set; }
-        public string Details { get; set; }
     }
 }
