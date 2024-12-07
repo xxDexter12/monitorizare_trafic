@@ -13,6 +13,7 @@ namespace monitorizare_trafic.Services
     public class TrafficMonitor
     {
         private ICaptureDevice _device;
+        private TrafficAnalyzer _trafficanalyzer=new TrafficAnalyzer();
         private List<NetworkData> _networkData = new List<NetworkData>();
         public List<NetworkData> CollectTrafficData()
         {
@@ -69,6 +70,21 @@ namespace monitorizare_trafic.Services
                     int packetSize = ipPacket.PayloadLength;
                     packetCount++;
 
+                    int destPort = -1;
+                    if(ipPacket.Protocol==ProtocolType.Tcp)
+                    {
+                        destPort = ipPacket.Extract<TcpPacket>().DestinationPort;
+                    }
+                    else if (ipPacket.Protocol==ProtocolType.Udp)
+                    {
+                        destPort=ipPacket.Extract<UdpPacket>().DestinationPort;
+                    }
+
+                    if (destPort != -1)
+                    {
+                        _trafficanalyzer.AddScanAttempt(sourceIP, destIP, destPort);
+                    }
+                 
                     // Adaugă un nou obiect în colecția ObservableCollection
                     NetworkData packetData = new NetworkData
                     {
