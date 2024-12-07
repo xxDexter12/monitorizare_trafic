@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.ObjectModel;
 
 namespace monitorizare_trafic.Services
 {
@@ -18,6 +19,8 @@ namespace monitorizare_trafic.Services
             return _networkData;
         }
         private int packetCount = 0;
+        private ObservableCollection<NetworkData> trafficData = new ObservableCollection<NetworkData>();
+
         public void StartMonitoring()
         {
             var devices = CaptureDeviceList.Instance;
@@ -45,14 +48,15 @@ namespace monitorizare_trafic.Services
             Console.WriteLine("Starting capture...");
             _device.StartCapture();
         }
-
+        public event Action<NetworkData> PacketCaptured;
         private void OnPacketArrival(object sender, PacketCapture e)
         {   
-            if(this.packetCount==10)
-            {
-                StopMonitoring();
-            }
-            this.packetCount++;
+            //if(this.packetCount==10)
+            //{
+            //    StopMonitoring();
+            //    return;
+            //}
+            //this.packetCount++;
             try
             {
                 var packet = Packet.ParsePacket(e.GetPacket().LinkLayerType, e.GetPacket().Data);
@@ -60,18 +64,24 @@ namespace monitorizare_trafic.Services
                 var ipPacket = packet.Extract<IPPacket>();
                 if (ipPacket != null)
                 {
-                    var networkData = new NetworkData
+                    string sourceIP = ipPacket.SourceAddress.ToString();
+                    string destIP = ipPacket.DestinationAddress.ToString();
+                    int packetSize = ipPacket.PayloadLength;
+                    packetCount++;
+
+                    // Adaugă un nou obiect în colecția ObservableCollection
+                    NetworkData packetData = new NetworkData
                     {
-                        SourceIP = ipPacket.SourceAddress.ToString(),
-                        DestinationIP = ipPacket.DestinationAddress.ToString(),
-                        DataSize = ipPacket.PayloadLength,
-                        Timestamp = DateTime.Now
+                        Index = packetCount,
+                        SourceIP = sourceIP,
+                        DestinationIP = destIP,
+                        DataSize = packetSize
                     };
 
-                    // Adaugă pachetul la listă
-                    _networkData.Add(networkData);
+                    // Trimite evenimentul
+                    PacketCaptured?.Invoke(packetData);
 
-                    Console.WriteLine($"Packet captured: {networkData.SourceIP} -> {networkData.DestinationIP}, Size: {networkData.DataSize} bytes");
+                    Console.WriteLine($"Packet captured: {sourceIP} -> {destIP}, Size: {packetSize} bytes");
                 }
 
                }

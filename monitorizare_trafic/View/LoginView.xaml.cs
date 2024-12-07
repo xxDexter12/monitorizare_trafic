@@ -93,6 +93,12 @@ namespace monitorizare_trafic.View
             }
         }
 
-
+        private void txtPass_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == System.Windows.Input.Key.Enter)
+            {
+                btnLogin_Click(sender, e); // Apelăm funcția de login
+            }
+        }
     }
 }

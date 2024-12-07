@@ -2,8 +2,8 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="User Dashboard" Height="600" Width="1000" Background="#1C1C1C">
-
     <Window.Resources>
+        <!-- Definirea stilurilor pentru butoane -->
         <Style x:Key="ButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="#4CAF50"/>
             <Setter Property="Foreground" Value="White"/>
@@ -22,8 +22,60 @@
 
         <!-- Header -->
         <Grid Grid.Row="0" Background="#2C3E50" Height="60">
-            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" 
-                       FontSize="24" FontWeight="Bold" Foreground="White">
+            <!-- Button Row -->
+            <Grid HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,10,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Minimize Button -->
+                <Button x:Name="btnMinimize" BorderThickness="0" Content="-" Foreground="White"
+                        FontSize="16" FontFamily="Montserrat" Cursor="Hand" Grid.Column="0" Click="btnMinimize_Click">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="#28AEED"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#278BEF"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Width="18" Height="18" CornerRadius="9" Background="{TemplateBinding Background}">
+                                <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <!-- Close Button -->
+                <Button x:Name="btnClose" BorderThickness="0" Content="X" Foreground="White"
+                        FontSize="12" FontFamily="Montserrat" Cursor="Hand" Grid.Column="1" Click="btnClose_Click">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="#DA34AE"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#C62DAE"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Width="18" Height="18" CornerRadius="9" Background="{TemplateBinding Background}">
+                                <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Grid>
+
+            <!-- Title Text -->
+            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24" FontWeight="Bold" Foreground="White">
                 Traffic Monitoring Dashboard
             </TextBlock>
         </Grid>
@@ -49,13 +101,19 @@
                     <TabItem Header="Live Traffic">
                         <StackPanel>
                             <TextBlock Text="Captured Packets" FontSize="18" FontWeight="Bold" Foreground="White" Margin="10"/>
-                            <DataGrid Name="PacketDataGrid" AutoGenerateColumns="True" Height="200" Margin="10" Background="#34495E" Foreground="White"/>
+                            <DataGrid Name="PacketDataGrid" AutoGenerateColumns="True" Height="200" Margin="10" Background="#34495E" Foreground="Black"/>
+                            <TextBlock Name="TotalPagesTextBlock" FontSize="14" Foreground="White" Margin="10"/>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <Button Content="Previous" Style="{StaticResource ButtonStyle}" Margin="5" Click="PrevPageButton_Click"/>
+                                <Button Content="Next" Style="{StaticResource ButtonStyle}" Margin="5" Click="NextPageButton_Click"/>
+                            </StackPanel>
                         </StackPanel>
                     </TabItem>
 
                     <TabItem Header="Traffic Trends">
                         <StackPanel>
                             <TextBlock Text="Traffic Graphs" FontSize="18" FontWeight="Bold" Foreground="White" Margin="10"/>
+                            <Image Source="Images/TrafficGraph.png" Margin="10" Height="300" />
                         </StackPanel>
                     </TabItem>
 
