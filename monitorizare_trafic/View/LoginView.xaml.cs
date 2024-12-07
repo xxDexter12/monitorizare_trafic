@@ -100,5 +100,21 @@ namespace monitorizare_trafic.View
                 btnLogin_Click(sender, e); // Apelăm funcția de login
             }
         }
+
+        private void txtUser_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                // Mută focusul la următorul control (de exemplu, PasswordTextBox)
+                txtPass.Focus();
+            }
+        }
+        private void RegisterButton_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            var registerWindow = new RegisterView(); // Crează o instanță a ferestrei RegisterView
+            registerWindow.Show(); // Deschide fereastra de înregistrare
+            this.Close(); // Închide fereastra de login dacă dorești
+        }
+
     }
 }

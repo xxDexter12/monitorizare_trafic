@@ -18,13 +18,13 @@ namespace monitorizare_trafic.Utils
         {
             using (SHA256 sha256 = SHA256.Create())
             {
-                byte[] bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(input));
-                StringBuilder builder = new StringBuilder();
-                foreach (byte b in bytes)
+                byte[] hashBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(input));
+                StringBuilder hashStringBuilder = new StringBuilder();
+                foreach (byte b in hashBytes)
                 {
-                    builder.Append(b.ToString("x2"));
+                    hashStringBuilder.Append(b.ToString("x2"));
                 }
-                return builder.ToString();
+                return hashStringBuilder.ToString();
             }
         }
     }

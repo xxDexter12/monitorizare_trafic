@@ -21,5 +21,8 @@ namespace monitorizare_trafic.Models
 
         [Column] // Coloana "Role"
         public string Role { get; set; }
+
+        [Column]
+        public string Email { get; set; }
     }
 }

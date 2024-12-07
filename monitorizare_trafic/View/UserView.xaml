@@ -1,7 +1,8 @@
 ﻿<Window x:Class="monitorizare_trafic.View.UserView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="User Dashboard" Height="600" Width="1000" Background="#1C1C1C">
+        Title="User Dashboard" Height="600" Width="1000" Background="#1C1C1C"
+        WindowStyle="None" ResizeMode="NoResize">
     <Window.Resources>
         <!-- Definirea stilurilor pentru butoane -->
         <Style x:Key="ButtonStyle" TargetType="Button">
@@ -101,7 +102,7 @@
                     <TabItem Header="Live Traffic">
                         <StackPanel>
                             <TextBlock Text="Captured Packets" FontSize="18" FontWeight="Bold" Foreground="White" Margin="10"/>
-                            <DataGrid Name="PacketDataGrid" AutoGenerateColumns="True" Height="200" Margin="10" Background="#34495E" Foreground="Black"/>
+                            <DataGrid Name="PacketDataGrid" AutoGenerateColumns="True" Height="200" Margin="10" Background="#34495E" Foreground="Black" IsReadOnly="True"/>
                             <TextBlock Name="TotalPagesTextBlock" FontSize="14" Foreground="White" Margin="10"/>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                 <Button Content="Previous" Style="{StaticResource ButtonStyle}" Margin="5" Click="PrevPageButton_Click"/>

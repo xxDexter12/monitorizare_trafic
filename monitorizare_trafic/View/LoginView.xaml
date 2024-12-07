@@ -172,7 +172,8 @@
                              Height="28"
                              VerticalContentAlignment="Center"
                              Margin="0,5,0,0"
-                             Padding="20,0,0,0">
+                             Padding="20,0,0,0"
+                             KeyDown="txtUser_KeyDown">
 
                         <TextBox.Background>
                             <ImageBrush ImageSource="/Images/user-icon.png"
@@ -260,6 +261,25 @@
                                Cursor="Hand"
                                Margin="8,0,0,0"/>
 
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Center"
+                            Margin="0,15,0,0">
+
+                        <TextBlock Text="Don't have an account?"
+                               Foreground="DarkGray"
+                               FontSize="12"
+                               FontWeight="Medium"
+                               FontFamily="Montserrat"/>
+
+                        <TextBlock Text="Register"
+                               Foreground="White"
+                               FontSize="12"
+                               FontWeight="Medium"
+                               FontFamily="Montserrat"
+                               Cursor="Hand"
+                               Margin="8,0,0,0"
+                               MouseDown="RegisterButton_MouseDown"/>
                     </StackPanel>
 
                 </StackPanel>
