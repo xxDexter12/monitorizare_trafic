@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Data.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,8 +11,15 @@ namespace monitorizare_trafic.Utils
     {
         public string GetConnectionString()
         {
-            // Cod pentru obținerea stringului de conexiune
-            return "YourConnectionString";
+            
+            return "Server=DESKTOP-UMU84AP\\SQLEXPRESS;Database=IDSDB;Trusted_Connection=True;";
+        }
+
+        public DataContext GetDataContext()
+        {
+            string connectionString = GetConnectionString();
+            return new DataContext(connectionString);   
+
         }
     }
 }
