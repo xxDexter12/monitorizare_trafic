@@ -8,7 +8,7 @@ namespace monitorizare_trafic.View
     public partial class UserView : Window
     {
         private TrafficMonitor _trafficMonitor;
-
+        private bool is_monitoring = false;
         public UserView()
         {
             InitializeComponent();

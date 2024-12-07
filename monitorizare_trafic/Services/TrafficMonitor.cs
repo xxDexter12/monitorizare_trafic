@@ -12,12 +12,12 @@ namespace monitorizare_trafic.Services
     public class TrafficMonitor
     {
         private ICaptureDevice _device;
+        private List<NetworkData> _networkData = new List<NetworkData>();
         public List<NetworkData> CollectTrafficData()
         {
-            // Codul pentru colectarea datelor
-            return new List<NetworkData>();
+            return _networkData;
         }
-
+        private int packetCount = 0;
         public void StartMonitoring()
         {
             var devices = CaptureDeviceList.Instance;
@@ -47,22 +47,34 @@ namespace monitorizare_trafic.Services
         }
 
         private void OnPacketArrival(object sender, PacketCapture e)
-        {
+        {   
+            if(this.packetCount==10)
+            {
+                StopMonitoring();
+            }
+            this.packetCount++;
             try
             {
                 var packet = Packet.ParsePacket(e.GetPacket().LinkLayerType, e.GetPacket().Data);
 
                 var ipPacket = packet.Extract<IPPacket>();
-                if (ipPacket!=null)
+                if (ipPacket != null)
                 {
-                    string sourceIP = ipPacket.SourceAddress.ToString();
-                    string destIP = ipPacket.DestinationAddress.ToString();
-                    int packetSize = ipPacket.PayloadLength;
+                    var networkData = new NetworkData
+                    {
+                        SourceIP = ipPacket.SourceAddress.ToString(),
+                        DestinationIP = ipPacket.DestinationAddress.ToString(),
+                        DataSize = ipPacket.PayloadLength,
+                        Timestamp = DateTime.Now
+                    };
 
-                    Console.WriteLine($"Packet captured: {sourceIP} -> {destIP}, Size: {packetSize} bytes");
+                    // Adaugă pachetul la listă
+                    _networkData.Add(networkData);
+
+                    Console.WriteLine($"Packet captured: {networkData.SourceIP} -> {networkData.DestinationIP}, Size: {networkData.DataSize} bytes");
                 }
 
-            }
+               }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error parsing packet: {ex.Message}");

@@ -54,7 +54,7 @@ namespace monitorizare_trafic.View
             using (var db = manager.GetDataContext())
             {
                 // Verificăm utilizatorul în baza de date
-                var user = db.GetTable<User>().FirstOrDefault(u => u.Username == username && u.PasswordHash == passwordHash);
+                var user = db.GetTable<User>().FirstOrDefault(u => u.Username == username && u.Password == passwordHash);
 
                 if (user != null)
                 {
@@ -64,14 +64,14 @@ namespace monitorizare_trafic.View
                     switch (user.Role)
                     {
                         case "Admin":
-                            var adminWindow = new AdminView(); // Fereastra pentru Admin
-                            adminWindow.Show();
+                            //var adminWindow = new AdminView(); // Fereastra pentru Admin
+                            //adminWindow.Show();
                             this.Close(); // Închide fereastra de login
                             break;
 
                         case "Analyst":
-                            var analystWindow = new AnalystView(); // Fereastra pentru Analyst
-                            analystWindow.Show();
+                            //var analystWindow = new AnalystView(); // Fereastra pentru Analyst
+                            //analystWindow.Show();
                             this.Close(); // Închide fereastra de login
                             break;
 
