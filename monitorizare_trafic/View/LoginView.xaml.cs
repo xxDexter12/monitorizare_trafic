@@ -11,7 +11,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-
+using monitorizare_trafic.Models;
+using monitorizare_trafic.Utils;
+using monitorizare_trafic.Models;
 namespace monitorizare_trafic.View
 {
     /// <summary>
@@ -42,7 +44,55 @@ namespace monitorizare_trafic.View
 
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
+            string username = txtUser.Text;
+            string passwordHash = SecurityHelper.ComputeHash(txtPass.Password);  // Calculăm hash-ul parolei introduse
 
+            // Creează instanța clasei Manager pentru a obține contextul de date
+            var manager = new Manager();
+
+            // Obține contextul de date
+            using (var db = manager.GetDataContext())
+            {
+                // Verificăm utilizatorul în baza de date
+                var user = db.GetTable<User>().FirstOrDefault(u => u.Username == username && u.PasswordHash == passwordHash);
+
+                if (user != null)
+                {
+                    MessageBox.Show($"Logat ca {user.Role}.");
+
+                    // Navigare în funcție de rolul utilizatorului
+                    switch (user.Role)
+                    {
+                        case "Admin":
+                            var adminWindow = new AdminView(); // Fereastra pentru Admin
+                            adminWindow.Show();
+                            this.Close(); // Închide fereastra de login
+                            break;
+
+                        case "Analyst":
+                            var analystWindow = new AnalystView(); // Fereastra pentru Analyst
+                            analystWindow.Show();
+                            this.Close(); // Închide fereastra de login
+                            break;
+
+                        case "User":
+                            var userWindow = new UserView(); // Fereastra pentru BasicUser
+                            userWindow.Show();
+                            this.Close(); // Închide fereastra de login
+                            break;
+
+                        default:
+                            MessageBox.Show("Rol necunoscut.");
+                            break;
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Credențiale incorecte.");
+                }
+            }
         }
+
+
     }
 }
