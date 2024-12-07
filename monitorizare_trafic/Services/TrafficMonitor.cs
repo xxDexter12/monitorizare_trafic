@@ -28,7 +28,15 @@ namespace monitorizare_trafic.Services
                 return;
             }
 
-            _device = devices[0];
+            for(int i = 0; i < devices.Count; i++)
+            {
+                Console.WriteLine($"Device number: {i}\n Device: {devices[i].Description}");
+
+            }
+
+            //momentan lasam device 10 ca ala merge la mine pe laptop, de adaugat la monitorizare
+            //abilitatea sa schimbi device-ul
+            _device = devices[10];
             Console.WriteLine($"Using device: {_device.Description}");
 
             _device.OnPacketArrival += OnPacketArrival;

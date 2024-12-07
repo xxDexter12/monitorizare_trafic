@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using monitorizare_trafic.Services;
 
 namespace monitorizare_trafic.View
 {
@@ -22,6 +23,16 @@ namespace monitorizare_trafic.View
         public LoginView()
         {
             InitializeComponent();
+
+            TrafficMonitor monitor = new TrafficMonitor();
+
+            // Pornește monitorizarea
+            monitor.StartMonitoring();
+
+            Console.WriteLine("Press any key to stop monitoring...");
+
+            // Oprește monitorizarea
+            //monitor.StopMonitoring();
         }
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)

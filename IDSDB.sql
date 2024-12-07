@@ -39,3 +39,9 @@ CREATE TABLE BlockedIPs (
     UnblockedAt DATETIME NULL, -- NULL dacă IP-ul încă este blocat
     Reason NVARCHAR(255)
 );
+
+INSERT INTO Users (Username, Password, Role, Email, IsActive)
+VALUES 
+('admin','8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 'Admin', 'admin@example.com', 1),
+('analyst','f44ceb062e35dfeea6ed7f8524d53bb0bff19f553e25cae7ef4850e4185ccbba', 'Analyst', 'analyst@example.com', 1),
+('user','04f8996da763b7a969b1028ee3007569eaf3a635486ddab211d512c85b9df8fb', 'User', 'user@example.com', 1);
