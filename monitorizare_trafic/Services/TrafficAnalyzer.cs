@@ -36,7 +36,9 @@ namespace monitorizare_trafic.Services
             }
             _scanAttempts[srcIP].Add(scanAttempt);
 
-            _scanAttempts[srcIP] = _scanAttempts[srcIP].Where(a => a.Timestamp > DateTime.Now.AddSeconds(-TimeWindowInSeconds)).ToList();
+            //_scanAttempts[srcIP] = _scanAttempts[srcIP].Where(a => a.Timestamp > DateTime.Now.AddSeconds(-TimeWindowInSeconds)).ToList();
+
+            DetectScan(srcIP, destIP);
 
         }
 
@@ -47,7 +49,7 @@ namespace monitorizare_trafic.Services
                 .GroupBy(a => a.destPort)
                 .Where(g => g.Count() >= ScanPortThreshold)
                 .ToList();
-            if (recentAttempts.Count() >= ScanThreshold)
+            if (recentAttempts.Count() >= ScanPortThreshold)
             {
                 Console.WriteLine($"Potential host scan detected from {srcIP} to {destIP}. Scan type: Port scan.");
             }
