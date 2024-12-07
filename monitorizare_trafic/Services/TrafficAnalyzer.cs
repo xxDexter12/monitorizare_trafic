@@ -9,10 +9,48 @@ namespace monitorizare_trafic.Services
 {
     public class TrafficAnalyzer
     {
-        public List<SuspiciousActivity> DetectSuspiciousActivities(List<NetworkData> networkData)
+        private Dictionary<string, List<ScanAttempt>> _scanAttempts = new Dictionary<string, List<ScanAttempt>>();
+        private const int ScanThreshold = 100;
+        private const int TimeWindowInSeconds = 10;
+        private const int ScanPortThreshold = 5;
+        private class ScanAttempt
         {
-            // Cod pentru detectarea activităților suspecte
-            return new List<SuspiciousActivity>();
+            public string sourceIp { get; set; }
+            public string targetIp { get; set; }
+            public int destPort { get; set; }
+            public DateTime Timestamp { get; set; }
+        }
+        public void AddScanAttempt(string srcIP, string destIP, int destPort)
+        {
+            var scanAttempt = new ScanAttempt
+            {
+                sourceIp = srcIP,
+                targetIp = destIP,
+                destPort = destPort,
+                Timestamp = DateTime.Now
+            };
+
+            if (!_scanAttempts.ContainsKey(srcIP))
+            {
+                _scanAttempts[srcIP] = new List<ScanAttempt>();
+            }
+            _scanAttempts[srcIP].Add(scanAttempt);
+
+            _scanAttempts[srcIP] = _scanAttempts[srcIP].Where(a => a.Timestamp > DateTime.Now.AddSeconds(-TimeWindowInSeconds)).ToList();
+
+        }
+
+        private void DetectScan(string srcIP, string destIP)
+        {
+            var recentAttempts = _scanAttempts[srcIP]
+                .Where(a => a.targetIp == destIP)
+                .GroupBy(a => a.destPort)
+                .Where(g => g.Count() >= ScanPortThreshold)
+                .ToList();
+            if (recentAttempts.Count() >= ScanThreshold)
+            {
+                Console.WriteLine($"Potential host scan detected from {srcIP} to {destIP}. Scan type: Port scan.");
+            }
         }
     }
 }
