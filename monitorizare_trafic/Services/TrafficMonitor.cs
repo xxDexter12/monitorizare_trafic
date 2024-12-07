@@ -73,11 +73,11 @@ namespace monitorizare_trafic.Services
                     int destPort = -1;
                     if(ipPacket.Protocol==ProtocolType.Tcp)
                     {
-                        destPort = ipPacket.Extract<TcpPacket>().DestinationPort;
+                        destPort = packet.Extract<TcpPacket>().DestinationPort;
                     }
                     else if (ipPacket.Protocol==ProtocolType.Udp)
                     {
-                        destPort=ipPacket.Extract<UdpPacket>().DestinationPort;
+                        destPort= packet.Extract<UdpPacket>().DestinationPort;
                     }
 
                     if (destPort != -1)
@@ -91,13 +91,14 @@ namespace monitorizare_trafic.Services
                         Index = packetCount,
                         SourceIP = sourceIP,
                         DestinationIP = destIP,
+                        Port = destPort,
                         DataSize = packetSize
                     };
 
                     // Trimite evenimentul
                     PacketCaptured?.Invoke(packetData);
 
-                    Console.WriteLine($"Packet captured: {sourceIP} -> {destIP}, Size: {packetSize} bytes");
+                    //Console.WriteLine($"Packet captured: {sourceIP} -> {destIP}, Size: {packetSize} bytes");
                 }
 
                }
