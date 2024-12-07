@@ -5,6 +5,7 @@ using System.Windows;
 using System.Threading;
 using System.Linq;
 using System;
+using System.Windows.Controls;
 
 namespace monitorizare_trafic.View
 {
@@ -15,12 +16,22 @@ namespace monitorizare_trafic.View
         private List<NetworkData> _networkData = new List<NetworkData>();
         private int _currentPage = 1;
         private const int ItemsPerPage = 50;
+        private TrafficAnalyzer _trafficAnalyzer;
 
         public UserView()
         {
             InitializeComponent();
             _trafficMonitor = new TrafficMonitor();
             _trafficMonitor.PacketCaptured += OnPacketCaptured; // Abonăm la eveniment
+            _trafficAnalyzer = new TrafficAnalyzer();
+            _trafficAnalyzer.AlertGenerated += OnAlertGenerated;
+        }
+        private void OnAlertGenerated(string alert)
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                AlertsDataGrid.Items.Add(new { AlertMessage = alert }); // Adaugă alerta în DataGrid
+            });
         }
 
         private void btnStartMonitoring_Click(object sender, RoutedEventArgs e)
@@ -98,6 +109,22 @@ namespace monitorizare_trafic.View
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            this.TabControl.Visibility = Visibility.Collapsed;
+            LiveTrafficPanel.Visibility = Visibility.Collapsed;
+            TrafficTrendsPanel.Visibility = Visibility.Collapsed;
+            AlertsPanel.Visibility = Visibility.Visible;
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            TabControl.Visibility = Visibility.Visible;
+            LiveTrafficPanel.Visibility = Visibility.Visible;
+            TrafficTrendsPanel.Visibility = Visibility.Visible;
+            AlertsPanel.Visibility = Visibility.Collapsed;
         }
     }
 }

@@ -4,6 +4,7 @@ using monitorizare_trafic.Models;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.ObjectModel;
 
 namespace monitorizare_trafic.Services
 {
@@ -13,6 +14,9 @@ namespace monitorizare_trafic.Services
         private const int ScanThreshold = 100;
         private const int TimeWindowInSeconds = 10;
         private const int ScanPortThreshold = 5;
+        public ObservableCollection<string> Alerts { get; private set; } = new ObservableCollection<string>();
+        public event Action<string> AlertGenerated;
+
         private class ScanAttempt
         {
             public string sourceIp { get; set; }
@@ -51,7 +55,15 @@ namespace monitorizare_trafic.Services
                 .ToList();
             if (recentAttempts.Count() >= ScanPortThreshold)
             {
-                Console.WriteLine($"Potential host scan detected from {srcIP} to {destIP}. Scan type: Port scan.");
+                var alert = $"Potential host scan detected from {srcIP} to {destIP}. Scan type: Port scan.";
+
+                // Adăugăm alerta în colecția ObservableCollection
+                App.Current.Dispatcher.Invoke(() =>
+                {
+                    Alerts.Add(alert); // Modificăm ObservableCollection
+                });
+
+                AlertGenerated.Invoke(alert);
             }
         }
     }

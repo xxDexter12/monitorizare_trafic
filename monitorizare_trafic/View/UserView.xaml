@@ -92,15 +92,15 @@
             <StackPanel Background="#34495E" VerticalAlignment="Stretch">
                 <Button Content="Start Monitoring" Style="{StaticResource ButtonStyle}" Margin="10" HorizontalAlignment="Stretch" Click="btnStartMonitoring_Click"/>
                 <Button Content="Stop Monitoring" Style="{StaticResource ButtonStyle}" Margin="10" HorizontalAlignment="Stretch" Click="btnStopMonitoring_Click"/>
-                <Button Content="View Alerts" Style="{StaticResource ButtonStyle}" Margin="10" HorizontalAlignment="Stretch"/>
+                <Button Content="View Alerts" Style="{StaticResource ButtonStyle}" Margin="10" HorizontalAlignment="Stretch" Click="Button_Click"/>
                 <Button Content="View Logs" Style="{StaticResource ButtonStyle}" Margin="10" HorizontalAlignment="Stretch"/>
             </StackPanel>
-
+         
             <!-- Main Content Area -->
             <Grid Grid.Column="1">
-                <TabControl>
+                <TabControl x:Name="TabControl">
                     <TabItem Header="Live Traffic">
-                        <StackPanel>
+                        <StackPanel Name="LiveTrafficPanel" Visibility="Visible">
                             <TextBlock Text="Captured Packets" FontSize="18" FontWeight="Bold" Foreground="White" Margin="10"/>
                             <DataGrid Name="PacketDataGrid" AutoGenerateColumns="True" Height="200" Margin="10" Background="#34495E" Foreground="Black" IsReadOnly="True"/>
                             <TextBlock Name="TotalPagesTextBlock" FontSize="14" Foreground="White" Margin="10"/>
@@ -112,7 +112,7 @@
                     </TabItem>
 
                     <TabItem Header="Traffic Trends">
-                        <StackPanel>
+                        <StackPanel  Name="TrafficTrendsPanel" Visibility="Visible">
                             <TextBlock Text="Traffic Graphs" FontSize="18" FontWeight="Bold" Foreground="White" Margin="10"/>
                             <Image Source="Images/TrafficGraph.png" Margin="10" Height="300" />
                         </StackPanel>
@@ -123,6 +123,16 @@
                                  Height="200" Margin="10" Background="#34495E" Foreground="White"/>
                     </TabItem>
                 </TabControl>
+                <StackPanel Name="AlertsPanel" Visibility="Collapsed">
+                    <TextBlock Text="Alerts" FontSize="18" FontWeight="Bold" Foreground="White" Margin="10"/>
+                    <DataGrid Name="AlertsDataGrid" AutoGenerateColumns="False" Height="400" Margin="10"
+                 Background="#34495E" Foreground="Black" IsReadOnly="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Alert Message" Binding="{Binding AlertMessage}" Width="*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <Button Content="Back to Dashboard" Style="{StaticResource ButtonStyle}" Margin="10" Click="Button_Click_1"/>
+                </StackPanel>
             </Grid>
         </Grid>
     </Grid>

@@ -82,9 +82,9 @@ namespace monitorizare_trafic.Services
 
                     if (destPort != -1)
                     {
-                        _trafficanalyzer.AddScanAttempt(sourceIP, destIP, destPort);
+                        Task.Run(() => _trafficanalyzer.AddScanAttempt(sourceIP, destIP, destPort));
                     }
-                 
+
                     // Adaugă un nou obiect în colecția ObservableCollection
                     NetworkData packetData = new NetworkData
                     {
