@@ -78,6 +78,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Models\BasicUser.cs" />
+    <Compile Include="Models\NetworkAdmin.cs" />
+    <Compile Include="Models\NetworkAnalyst.cs" />
     <Compile Include="Services\ActivityRepository.cs" />
     <Compile Include="Services\NotificationService.cs" />
     <Compile Include="Services\TrafficAnalyzer.cs" />
