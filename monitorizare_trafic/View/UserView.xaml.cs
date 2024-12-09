@@ -6,6 +6,8 @@ using System.Threading;
 using System.Linq;
 using System;
 using System.Windows.Controls;
+using LiveCharts;
+using LiveCharts.Wpf;
 
 namespace monitorizare_trafic.View
 {
@@ -18,13 +20,20 @@ namespace monitorizare_trafic.View
         private const int ItemsPerPage = 50;
         private TrafficAnalyzer _trafficAnalyzer;
 
+        private ChartValues<int> PacketTrendValues = new ChartValues<int>();
+        private List<string> TimeLabels = new List<string>();
         public UserView()
         {
             InitializeComponent();
+            TrafficChart.Series[0].Values = PacketTrendValues;
+             TrafficChart.AxisX[0].Labels = TimeLabels;
             _trafficMonitor = new TrafficMonitor();
             _trafficMonitor.PacketCaptured += OnPacketCaptured; // Abonăm la eveniment
             _trafficAnalyzer = new TrafficAnalyzer();
             _trafficAnalyzer.AlertGenerated += OnAlertGenerated;
+
+            _trafficAnalyzer.TrafficTrends.CollectionChanged += UpdateChart;
+
         }
         private void OnAlertGenerated(string alert)
         {
@@ -32,6 +41,39 @@ namespace monitorizare_trafic.View
             {
                 AlertsDataGrid.Items.Add(new { AlertMessage = alert }); // Adaugă alerta în DataGrid
             });
+        }
+        private void UpdateChart(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                foreach (TrafficTrend trend in e.NewItems)
+                {
+                    PacketTrendValues.Add(trend.PacketCount);
+                    TimeLabels.Add(trend.Timestamp.ToString("HH:mm:ss"));
+
+                    // Elimină datele mai vechi de 10 puncte pentru performanță
+                    if (PacketTrendValues.Count > 10)
+                    {
+                        PacketTrendValues.RemoveAt(0);
+                        TimeLabels.RemoveAt(0);
+                    }
+                }
+
+                // Actualizare grafic
+                TrafficChart.AxisX[0].Labels = TimeLabels;
+            });
+        }
+        private void RefreshTrafficData_Click(object sender, RoutedEventArgs e)
+        {
+            // Reîncarcă datele curente din TrafficTrends
+            TrafficChart.Series[0].Values = new ChartValues<int>(_trafficAnalyzer.TrafficTrends.Select(t => t.PacketCount));
+            TrafficChart.AxisX[0].Labels = _trafficAnalyzer.TrafficTrends.Select(t => t.Timestamp.ToString("HH:mm:ss")).ToList();
+        }
+        private void ClearTrafficData_Click(object sender, RoutedEventArgs e)
+        {
+            PacketTrendValues.Clear();
+            TimeLabels.Clear();
+            TrafficChart.AxisX[0].Labels.Clear();
         }
 
         private void btnStartMonitoring_Click(object sender, RoutedEventArgs e)

@@ -70,6 +70,7 @@ namespace monitorizare_trafic.Services
                     int packetSize = ipPacket.PayloadLength;
                     packetCount++;
 
+                    _trafficanalyzer.UpdateTrafficTrends(packetCount);
                     int destPort = -1;
                     if(ipPacket.Protocol==ProtocolType.Tcp)
                     {
