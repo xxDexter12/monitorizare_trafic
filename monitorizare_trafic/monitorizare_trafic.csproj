@@ -91,6 +91,7 @@
     <Compile Include="Rules\HostScanRule.cs" />
     <Compile Include="Rules\IRule.cs" />
     <Compile Include="Services\ActivityRepository.cs" />
+    <Compile Include="Services\BlackNurseDetector.cs" />
     <Compile Include="Services\NotificationService.cs" />
     <Compile Include="Services\TrafficAnalyzer.cs" />
     <Compile Include="Services\TrafficMonitor.cs" />
