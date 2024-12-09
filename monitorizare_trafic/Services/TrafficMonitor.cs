@@ -14,6 +14,7 @@ namespace monitorizare_trafic.Services
     {
         private ICaptureDevice _device;
         private TrafficAnalyzer _trafficanalyzer=new TrafficAnalyzer();
+        private BlackNurseDetector _blackNurseDetector = new BlackNurseDetector();
         private List<NetworkData> _networkData = new List<NetworkData>();
         public List<NetworkData> CollectTrafficData()
         {
@@ -79,6 +80,10 @@ namespace monitorizare_trafic.Services
                     else if (ipPacket.Protocol==ProtocolType.Udp)
                     {
                         destPort= packet.Extract<UdpPacket>().DestinationPort;
+                    }
+                    else if(ipPacket.Protocol==ProtocolType.Icmp)
+                    {
+                        _blackNurseDetector.AddIcmpPacket(sourceIP, packet.Extract<IcmpV4Packet>());
                     }
 
                     if (destPort != -1)
