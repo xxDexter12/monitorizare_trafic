@@ -1,0 +1,129 @@
+﻿<Window x:Class="monitorizare_trafic.View.AdministratorView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+        Title="Administrator Dashboard" Height="600" Width="1000" Background="#1C1C1C"
+        WindowStyle="None" ResizeMode="NoResize">
+    <Window.Resources>
+        <!-- Definirea stilurilor pentru butoane -->
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#4CAF50"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Grid Grid.Row="0" Background="#2C3E50" Height="60">
+            <!-- Button Row -->
+            <Grid HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,10,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Minimize Button -->
+                <Button x:Name="btnMinimize" BorderThickness="0" Content="-" Foreground="White"
+                        FontSize="16" FontFamily="Montserrat" Cursor="Hand" Grid.Column="0" Click="btnMinimize_Click">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="#28AEED"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#278BEF"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Width="18" Height="18" CornerRadius="9" Background="{TemplateBinding Background}">
+                                <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <!-- Close Button -->
+                <Button x:Name="btnClose" BorderThickness="0" Content="X" Foreground="White"
+                        FontSize="12" FontFamily="Montserrat" Cursor="Hand" Grid.Column="1" Click="btnClose_Click">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="#DA34AE"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#C62DAE"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Width="18" Height="18" CornerRadius="9" Background="{TemplateBinding Background}">
+                                <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Grid>
+
+            <!-- Title Text -->
+            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24" FontWeight="Bold" Foreground="White">
+                Network Administrator Dashboard
+            </TextBlock>
+        </Grid>
+
+        <!-- Main Content Section -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="250"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Sidebar -->
+            <StackPanel Background="#34495E" VerticalAlignment="Stretch">
+                <Button Content="View Users" Style="{StaticResource ButtonStyle}" Margin="10" HorizontalAlignment="Stretch" Click="btnViewUsers_Click"/>
+                <Button Content="Add User" Style="{StaticResource ButtonStyle}" Margin="10" HorizontalAlignment="Stretch" Click="btnAddUser_Click"/>
+                <Button Content="Remove User" Style="{StaticResource ButtonStyle}" Margin="10" HorizontalAlignment="Stretch" Click="btnRemoveUser_Click"/>
+                <Button Content="Block Port" Style="{StaticResource ButtonStyle}" Margin="10" HorizontalAlignment="Stretch" Click="btnBlockPort_Click"/>
+                <Button Content="Enable Protection" Style="{StaticResource ButtonStyle}" Margin="10" HorizontalAlignment="Stretch" Click="btnEnableProtection_Click"/>
+                <Button Content="Disable Protection" Style="{StaticResource ButtonStyle}" Margin="10" HorizontalAlignment="Stretch" Click="btnDisableProtection_Click"/>
+            </StackPanel>
+
+            <!-- Main Content Area -->
+            <Grid Grid.Column="1">
+                <TabControl x:Name="TabControl">
+                    <TabItem Header="User Management">
+                        <StackPanel Name="UserManagementPanel" Visibility="Visible" Margin="10">
+                            <TextBlock Text="User List" FontSize="18" FontWeight="Bold" Foreground="White" Margin="0,0,0,10"/>
+                            <DataGrid Name="UserDataGrid" AutoGenerateColumns="True" Height="300" Margin="10" Background="#34495E" Foreground="Black" IsReadOnly="True"/>
+                        </StackPanel>
+                    </TabItem>
+
+                    <TabItem Header="Network Management">
+                        <StackPanel Name="NetworkManagementPanel" Visibility="Visible" Margin="10">
+                            <TextBlock Text="Network Configuration" FontSize="18" FontWeight="Bold" Foreground="White" Margin="0,0,0,10"/>
+                            <TextBlock Text="Configure ports and protect network" FontSize="14" Foreground="White"/>
+                        </StackPanel>
+                    </TabItem>
+
+                    <TabItem Header="Protection Settings">
+                        <StackPanel Name="ProtectionPanel" Visibility="Visible" Margin="10">
+                            <TextBlock Text="Protection Status" FontSize="18" FontWeight="Bold" Foreground="White" Margin="0,0,0,10"/>
+                            <TextBlock Text="Configure system protection" FontSize="14" Foreground="White"/>
+                        </StackPanel>
+                    </TabItem>
+                </TabControl>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>

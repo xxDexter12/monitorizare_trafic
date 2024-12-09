@@ -64,8 +64,8 @@ namespace monitorizare_trafic.View
                     switch (user.Role)
                     {
                         case "Admin":
-                            //var adminWindow = new AdminView(); // Fereastra pentru Admin
-                            //adminWindow.Show();
+                            var adminWindow = new AdministratorView(); // Fereastra pentru Admin
+                            adminWindow.Show();
                             this.Close(); // Închide fereastra de login
                             break;
 
