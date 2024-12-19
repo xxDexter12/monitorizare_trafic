@@ -8,6 +8,8 @@ using System;
 using System.Windows.Controls;
 using LiveCharts;
 using LiveCharts.Wpf;
+using monitorizare_trafic.Utils;
+using System.Data.Linq;
 
 namespace monitorizare_trafic.View
 {
@@ -19,7 +21,7 @@ namespace monitorizare_trafic.View
         private int _currentPage = 1;
         private const int ItemsPerPage = 50;
         private TrafficAnalyzer _trafficAnalyzer;
-
+        public User user {  get; set; }
         private ChartValues<int> PacketTrendValues = new ChartValues<int>();
         private List<string> TimeLabels = new List<string>();
         public UserView()
@@ -134,6 +136,67 @@ namespace monitorizare_trafic.View
                 UpdatePagedData(); // Actualizăm DataGrid-ul
             }
         }
+
+        private void SubmitReportButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Obține datele din câmpuri
+            var reportName = ReportNameTextBox.Text;
+            var category = (EventCategoryComboBox.SelectedItem as ComboBoxItem)?.Content.ToString();
+            var priority = PriorityLevelComboBox.SelectedIndex + 1; // Obține nivelul de prioritate (1-5)
+            var description = EventDescriptionTextBox.Text;
+            var date = DateTime.Now;
+            var userid = user.UserId;
+
+
+            // Validare câmpuri obligatorii
+            if (string.IsNullOrWhiteSpace(reportName) || string.IsNullOrWhiteSpace(category) || date == null)
+            {
+                MessageBox.Show("Please fill in all required fields (Report Name, Category, Date).", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            // Creare raport (în memorie sau în baza de date)
+            var report = new Report
+            {
+                Title = reportName,
+                Category = category,
+                Priority = priority,
+                Description = description,
+                CreatedDate = date,
+                CreatedBy=userid,
+            };
+
+            try
+            {
+                Manager manager = new Manager();
+                DataContext db = manager.GetDataContext();
+                db.GetTable<Report>().InsertOnSubmit(report);
+                db.SubmitChanges();
+
+                MessageBox.Show("Report submitted successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+            // Salvare raport (exemplu cu EF Core)
+            //using (var context = new TrafficMonitoringContext())
+            //{
+            //    context.Reports.Add(report);
+            //    context.SaveChanges();
+            //}
+
+            // Confirmare
+            MessageBox.Show("The report has been successfully submitted.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            // Resetare câmpuri
+            ReportNameTextBox.Clear();
+            EventCategoryComboBox.SelectedIndex = 0;
+            PriorityLevelComboBox.SelectedIndex = 0;
+            EventDescriptionTextBox.Clear();
+        }
+
 
         private void PrevPageButton_Click(object sender, RoutedEventArgs e)
         {

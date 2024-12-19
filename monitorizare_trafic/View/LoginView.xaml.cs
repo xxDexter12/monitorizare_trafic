@@ -77,6 +77,7 @@ namespace monitorizare_trafic.View
 
                         case "User":
                             var userWindow = new UserView(); // Fereastra pentru BasicUser
+                            userWindow.user = user;
                             userWindow.Show();
                             this.Close(); // Închide fereastra de login
                             break;

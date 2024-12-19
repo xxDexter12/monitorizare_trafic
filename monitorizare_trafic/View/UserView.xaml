@@ -95,7 +95,7 @@
                 <Button Content="Stop Monitoring" Style="{StaticResource ButtonStyle}" Margin="10" HorizontalAlignment="Stretch" Click="btnStopMonitoring_Click"/>
                 <Button Content="View Alerts" Style="{StaticResource ButtonStyle}" Margin="10" HorizontalAlignment="Stretch" Click="Button_Click"/>
             </StackPanel>
-         
+
             <!-- Main Content Area -->
             <Grid Grid.Column="1">
                 <TabControl x:Name="TabControl">
@@ -141,6 +141,45 @@
                             </StackPanel>
                         </StackPanel>
                     </TabItem>
+                    <TabItem Header="Report Event">
+                        <StackPanel Name="ReportEventPanel" Visibility="Visible" Margin="10">
+                            <ComboBox x:Name="PriorityLevelComboBox" Width="200">
+                                <ComboBoxItem Content="1 (Low)" IsSelected="True"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3 (Medium)"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5 (High)"/>
+                            </ComboBox>
+
+                            <TextBlock Text="Event Category:" FontSize="14" Foreground="White" Margin="0,0,0,5"/>
+                            <ComboBox x:Name="EventCategoryComboBox" Width="200">
+                                <ComboBoxItem Content="Network Issue" IsSelected="True"/>
+                                <ComboBoxItem Content="Suspicious Activity"/>
+                                <ComboBoxItem Content="System Failure"/>
+                                <ComboBoxItem Content="Other"/>
+                            </ComboBox>
+
+                            <!-- Numele raportului -->
+                            <TextBlock Text="Report Name:" FontSize="14" Foreground="White" Margin="0,0,0,5"/>
+                            <TextBox Name="ReportNameTextBox" Height="30" Margin="0,0,0,10" Background="#34495E" Foreground="White"/>
+
+                            <!-- Categoria evenimentului -->
+
+                            <!-- Nivelul de prioritate -->
+
+                            <!-- Descrierea evenimentului -->
+                            <TextBox Name="EventDescriptionTextBox" AcceptsReturn="True" Height="100" Margin="0,0,0,10" Background="#34495E" Foreground="White" TextWrapping="Wrap"/>
+
+                            <!-- Data evenimentului -->
+                            <!-- <TextBlock Text="Event Date:" FontSize="14" Foreground="White" Margin="0,0,0,5"/> -->
+                            <!-- <DatePicker Name="EventDatePicker" SelectedDate="{x:Static sys:DateTime.Now}" Margin="0,0,0,10"/> -->
+
+                            <!-- Buton pentru trimiterea raportului -->
+                            <Button Content="Submit Report" Style="{StaticResource ButtonStyle}" Margin="0,20,0,0" Click="SubmitReportButton_Click"/> 
+                        </StackPanel>
+                    </TabItem>
+
+
                 </TabControl>
                 <StackPanel Name="AlertsPanel" Visibility="Collapsed">
                     <TextBlock Text="Alerts" FontSize="18" FontWeight="Bold" Foreground="White" Margin="10"/>

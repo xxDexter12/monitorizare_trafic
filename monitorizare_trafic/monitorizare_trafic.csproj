@@ -87,9 +87,8 @@
     <Compile Include="Models\BasicUser.cs" />
     <Compile Include="Models\NetworkAdmin.cs" />
     <Compile Include="Models\NetworkAnalyst.cs" />
+    <Compile Include="Models\Report.cs" />
     <Compile Include="Models\TrafficTrend.cs" />
-    <Compile Include="Rules\HostScanRule.cs" />
-    <Compile Include="Rules\IRule.cs" />
     <Compile Include="Services\ActivityRepository.cs" />
     <Compile Include="Services\BlackNurseDetector.cs" />
     <Compile Include="Services\NotificationService.cs" />

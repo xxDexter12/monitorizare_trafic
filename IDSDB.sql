@@ -40,6 +40,18 @@ CREATE TABLE BlockedIPs (
     Reason NVARCHAR(255)
 );
 
+CREATE TABLE Reports (
+    ReportId INT IDENTITY(1,1) PRIMARY KEY,       -- ID unic auto-generat
+    Title NVARCHAR(200) NOT NULL,                -- Titlul raportului, obligatoriu
+    Description NVARCHAR(MAX) NULL,              -- Descriere opțională
+	Category NVARCHAR(MAX) NOT NULL,
+    CreatedDate DATETIME DEFAULT GETDATE(),      -- Data creării, implicit data curentă
+    CreatedBy INT NOT NULL,                      -- ID-ul utilizatorului, foreign key
+    Status NVARCHAR(50) DEFAULT 'Open',          -- Starea raportului, implicit 'Open'
+    Priority INT DEFAULT 3,                      -- Nivelul de prioritate (implicit 3)
+    CONSTRAINT FK_Reports_Users FOREIGN KEY (CreatedBy) REFERENCES Users(UserId) ON DELETE CASCADE
+);
+
 INSERT INTO Users (Username, Password, Role, Email, IsActive)
 VALUES 
 ('admin','8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 'Admin', 'admin@example.com', 1),
