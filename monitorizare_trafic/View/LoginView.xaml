@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:monitorizare_trafic.View"
+        xmlns:vm="clr-namespace:monitorizare_trafic.ViewModel"
         mc:Ignorable="d"
         Title="LoginView" Height="550" Width="800"
         WindowStyle="None"
@@ -12,6 +13,10 @@
         Background="Transparent"
         AllowsTransparency="True"
         MouseDown="Window_MouseDown">
+
+    <Window.DataContext>
+        <vm:LoginViewModel/>
+    </Window.DataContext>
 
     <Border CornerRadius="12">
         <Border.Background>
@@ -45,7 +50,6 @@
                 </Grid.RowDefinitions>
 
                 <Grid Grid.Row="0">
-
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition Width="25"/>
@@ -54,12 +58,12 @@
                     </Grid.ColumnDefinitions>
 
                     <TextBlock Text="LOG IN"
-                               Foreground="DarkGray"
-                               FontSize="10"
-                               FontFamily="Montserrat"
-                               Grid.Column="0"
-                               VerticalAlignment="Center"
-                               Margin="10,0,0,0"/>
+                             Foreground="DarkGray"
+                             FontSize="10"
+                             FontFamily="Montserrat"
+                             Grid.Column="0"
+                             VerticalAlignment="Center"
+                             Margin="10,0,0,0"/>
 
                     <Button x:Name="btnMinimize"                           
                             BorderThickness="0"
@@ -69,7 +73,7 @@
                             FontFamily="Montserrat"
                             Cursor="Hand"
                             Grid.Column="1"
-                            Click="btnMinimize_Click">
+                            Command="{Binding MinimizeCommand}">
 
                         <Button.Style>
                             <Style TargetType="Button">
@@ -88,11 +92,10 @@
                                         CornerRadius="9"
                                         Background="{TemplateBinding Background}">
                                     <ContentPresenter VerticalAlignment="Center"
-                                                      HorizontalAlignment="Center"/>
+                                                    HorizontalAlignment="Center"/>
                                 </Border>
                             </ControlTemplate>
                         </Button.Template>
-
                     </Button>
 
                     <Button x:Name="btnClose"                          
@@ -103,7 +106,7 @@
                             FontFamily="Montserrat"
                             Cursor="Hand"
                             Grid.Column="2"
-                            Click="btnClose_Click">
+                            Command="{Binding CloseCommand}">
 
                         <Button.Style>
                             <Style TargetType="Button">
@@ -122,7 +125,7 @@
                                         CornerRadius="9"
                                         Background="{TemplateBinding Background}">
                                     <ContentPresenter VerticalAlignment="Center"
-                                                      HorizontalAlignment="Center"/>
+                                                    HorizontalAlignment="Center"/>
                                 </Border>
                             </ControlTemplate>
                         </Button.Template>
@@ -138,75 +141,74 @@
                            Width="100" Height="100"/>
 
                     <TextBlock Text="RJ CODE"
-                               Foreground="White"
-                               FontSize="25"
-                               FontWeight="Medium"
-                               FontFamily="Montserrat"
-                               HorizontalAlignment="Center"/>
+                             Foreground="White"
+                             FontSize="25"
+                             FontWeight="Medium"
+                             FontFamily="Montserrat"
+                             HorizontalAlignment="Center"/>
 
                     <TextBlock Text="Learning to code is useful no matter what your career ambitions are."
-                               Foreground="LightGray"
-                               FontSize="12"
-                               FontWeight="Medium"
-                               FontFamily="Montserrat"
-                               TextWrapping="Wrap"
-                               TextAlignment="Center"
-                               Margin="0,5,0,0"/>
-
+                             Foreground="LightGray"
+                             FontSize="12"
+                             FontWeight="Medium"
+                             FontFamily="Montserrat"
+                             TextWrapping="Wrap"
+                             TextAlignment="Center"
+                             Margin="0,5,0,0"/>
 
                     <TextBlock Text="Username"
-                               Foreground="DarkGray"
-                               FontSize="12"
-                               FontWeight="Medium"
-                               FontFamily="Montserrat"                             
-                               Margin="0,35,0,0"/>
+                             Foreground="DarkGray"
+                             FontSize="12"
+                             FontWeight="Medium"
+                             FontFamily="Montserrat"                             
+                             Margin="0,35,0,0"/>
 
                     <TextBox x:Name="txtUser"
-                             FontSize="13"
-                             FontWeight="Medium"
-                             FontFamily="Montserrat"                            
-                             Foreground="White"
-                             CaretBrush="LightGray"
-                             BorderBrush="DarkGray"
-                             BorderThickness="0,0,0,2"
-                             Height="28"
-                             VerticalContentAlignment="Center"
-                             Margin="0,5,0,0"
-                             Padding="20,0,0,0"
-                             KeyDown="txtUser_KeyDown">
+                            Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
+                            FontSize="13"
+                            FontWeight="Medium"
+                            FontFamily="Montserrat"                            
+                            Foreground="White"
+                            CaretBrush="LightGray"
+                            BorderBrush="DarkGray"
+                            BorderThickness="0,0,0,2"
+                            Height="28"
+                            VerticalContentAlignment="Center"
+                            Margin="0,5,0,0"
+                            Padding="20,0,0,0">
 
                         <TextBox.Background>
                             <ImageBrush ImageSource="/Images/user-icon.png"
-                                        Stretch="None"
-                                        AlignmentX="Left"/>
+                                      Stretch="None"
+                                      AlignmentX="Left"/>
                         </TextBox.Background>
                     </TextBox>
 
                     <TextBlock Text="Password"
-                               Foreground="DarkGray"
-                               FontSize="12"
-                               FontWeight="Medium"
-                               FontFamily="Montserrat"                             
-                               Margin="0,15,0,0"/>
+                             Foreground="DarkGray"
+                             FontSize="12"
+                             FontWeight="Medium"
+                             FontFamily="Montserrat"                             
+                             Margin="0,15,0,0"/>
 
                     <PasswordBox x:Name="txtPass"
-                             FontSize="13"
-                             FontWeight="Medium"
-                             FontFamily="Montserrat"                            
-                             Foreground="White"
-                             CaretBrush="LightGray"
-                             BorderBrush="DarkGray"
-                             BorderThickness="0,0,0,2"
-                             Height="28"
-                             VerticalContentAlignment="Center"
-                             Margin="0,5,0,0"
-                             Padding="20,0,0,0"
-                                 KeyDown="txtPass_KeyDown">
+                               local:PasswordBoxHelper.BoundPassword="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                               FontSize="13"
+                               FontWeight="Medium"
+                               FontFamily="Montserrat"                            
+                               Foreground="White"
+                               CaretBrush="LightGray"
+                               BorderBrush="DarkGray"
+                               BorderThickness="0,0,0,2"
+                               Height="28"
+                               VerticalContentAlignment="Center"
+                               Margin="0,5,0,0"
+                               Padding="20,0,0,0">
 
                         <PasswordBox.Background>
                             <ImageBrush ImageSource="/Images/key-icon.png"
-                                        Stretch="None"
-                                        AlignmentX="Left"/>
+                                      Stretch="None"
+                                      AlignmentX="Left"/>
                         </PasswordBox.Background>
                     </PasswordBox>
 
@@ -218,7 +220,7 @@
                             FontFamily="Montserrat"
                             Cursor="Hand"                           
                             Margin="0,50,0,0"
-                            Click="btnLogin_Click">
+                            Command="{Binding LoginCommand}">
 
                         <Button.Style>
                             <Style TargetType="Button">
@@ -237,57 +239,56 @@
                                         CornerRadius="20"
                                         Background="{TemplateBinding Background}">
                                     <ContentPresenter VerticalAlignment="Center"
-                                                      HorizontalAlignment="Center"/>
+                                                    HorizontalAlignment="Center"/>
                                 </Border>
                             </ControlTemplate>
                         </Button.Template>
                     </Button>
 
                     <StackPanel Orientation="Horizontal"
-                                HorizontalAlignment="Center"
-                                Margin="0,15,0,0">
+                              HorizontalAlignment="Center"
+                              Margin="0,15,0,0">
 
                         <TextBlock Text="Forgot Password?"
-                               Foreground="DarkGray"
-                               FontSize="12"
-                               FontWeight="Medium"
-                               FontFamily="Montserrat"/>
+                                 Foreground="DarkGray"
+                                 FontSize="12"
+                                 FontWeight="Medium"
+                                 FontFamily="Montserrat"/>
 
                         <TextBlock Text="Reset"
-                               Foreground="White"
-                               FontSize="12"
-                               FontWeight="Medium"
-                               FontFamily="Montserrat"
-                               Cursor="Hand"
-                               Margin="8,0,0,0"/>
-
+                                 Foreground="White"
+                                 FontSize="12"
+                                 FontWeight="Medium"
+                                 FontFamily="Montserrat"
+                                 Cursor="Hand"
+                                 Margin="8,0,0,0"/>
                     </StackPanel>
+
                     <StackPanel Orientation="Horizontal"
-                            HorizontalAlignment="Center"
-                            Margin="0,15,0,0">
+                              HorizontalAlignment="Center"
+                              Margin="0,15,0,0">
 
                         <TextBlock Text="Don't have an account?"
-                               Foreground="DarkGray"
-                               FontSize="12"
-                               FontWeight="Medium"
-                               FontFamily="Montserrat"/>
+                                 Foreground="DarkGray"
+                                 FontSize="12"
+                                 FontWeight="Medium"
+                                 FontFamily="Montserrat"/>
 
                         <TextBlock Text="Register"
-                               Foreground="White"
-                               FontSize="12"
-                               FontWeight="Medium"
-                               FontFamily="Montserrat"
-                               Cursor="Hand"
-                               Margin="8,0,0,0"
-                               MouseDown="RegisterButton_MouseDown"/>
+                                 Foreground="White"
+                                 FontSize="12"
+                                 FontWeight="Medium"
+                                 FontFamily="Montserrat"
+                                 Cursor="Hand"
+                                 Margin="8,0,0,0">
+                            <TextBlock.InputBindings>
+                                <MouseBinding MouseAction="LeftClick" 
+                                            Command="{Binding RegisterCommand}"/>
+                            </TextBlock.InputBindings>
+                        </TextBlock>
                     </StackPanel>
-
                 </StackPanel>
-
             </Grid>
-
         </Border>
-
     </Border>
-
 </Window>

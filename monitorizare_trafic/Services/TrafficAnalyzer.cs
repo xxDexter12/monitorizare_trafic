@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace monitorizare_trafic.Services
 {
@@ -21,21 +22,19 @@ namespace monitorizare_trafic.Services
         public ObservableCollection<TrafficTrend> TrafficTrends => _trafficTrends;
         public void UpdateTrafficTrends(int packetCount)
         {
-            App.Current.Dispatcher.Invoke(() =>
+            _trafficTrends.Add(new TrafficTrend
             {
-                _trafficTrends.Add(new TrafficTrend
-                {
-                    Timestamp = DateTime.Now,
-                    PacketCount = packetCount
-                });
-
-                // Păstrăm doar ultimele 10 minute de date pentru trend
-                while (_trafficTrends.Count > 0 &&
-                       _trafficTrends[0].Timestamp < DateTime.Now.AddMinutes(-10))
-                {
-                    _trafficTrends.RemoveAt(0);
-                }
+                Timestamp = DateTime.Now,
+                PacketCount = packetCount
             });
+
+            // Optionally, clean old trends
+            while (_trafficTrends.Count > 0 &&
+                   _trafficTrends[0].Timestamp < DateTime.Now.AddMinutes(-10))
+            {
+                _trafficTrends.RemoveAt(0);
+            }
+
         }
         private class ScanAttempt
         {

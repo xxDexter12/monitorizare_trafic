@@ -96,7 +96,13 @@
     <Compile Include="Services\TrafficMonitor.cs" />
     <Compile Include="Utils\Logger.cs" />
     <Compile Include="Utils\Manager.cs" />
+    <Compile Include="Utils\PasswordBoxHelper.cs" />
     <Compile Include="Utils\SecurityHelper.cs" />
+    <Compile Include="ViewModel\AdministratorViewModel.cs" />
+    <Compile Include="ViewModel\LoginViewModel.cs" />
+    <Compile Include="ViewModel\RelayCommand.cs" />
+    <Compile Include="ViewModel\UserViewModel.cs" />
+    <Compile Include="ViewModel\ViewModelBase.cs" />
     <Compile Include="View\AddUserDialog.xaml.cs">
       <DependentUpon>AddUserDialog.xaml</DependentUpon>
     </Compile>

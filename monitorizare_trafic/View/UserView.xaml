@@ -2,10 +2,15 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+        xmlns:viewmodels="clr-namespace:monitorizare_trafic.ViewModels"
         Title="User Dashboard" Height="600" Width="1000" Background="#1C1C1C"
         WindowStyle="None" ResizeMode="NoResize">
+
+    <Window.DataContext>
+        <viewmodels:UserViewModel/>
+    </Window.DataContext>
+
     <Window.Resources>
-        <!-- Definirea stilurilor pentru butoane -->
         <Style x:Key="ButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="#4CAF50"/>
             <Setter Property="Foreground" Value="White"/>
@@ -33,7 +38,8 @@
 
                 <!-- Minimize Button -->
                 <Button x:Name="btnMinimize" BorderThickness="0" Content="-" Foreground="White"
-                        FontSize="16" FontFamily="Montserrat" Cursor="Hand" Grid.Column="0" Click="btnMinimize_Click">
+                        FontSize="16" FontFamily="Montserrat" Cursor="Hand" Grid.Column="0" 
+                        Command="{Binding MinimizeCommand}">
                     <Button.Style>
                         <Style TargetType="Button">
                             <Setter Property="Background" Value="#28AEED"/>
@@ -55,7 +61,8 @@
 
                 <!-- Close Button -->
                 <Button x:Name="btnClose" BorderThickness="0" Content="X" Foreground="White"
-                        FontSize="12" FontFamily="Montserrat" Cursor="Hand" Grid.Column="1" Click="btnClose_Click">
+                        FontSize="12" FontFamily="Montserrat" Cursor="Hand" Grid.Column="1" 
+                        Command="{Binding CloseCommand}">
                     <Button.Style>
                         <Style TargetType="Button">
                             <Setter Property="Background" Value="#DA34AE"/>
@@ -76,8 +83,8 @@
                 </Button>
             </Grid>
 
-            <!-- Title Text -->
-            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24" FontWeight="Bold" Foreground="White">
+            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" 
+                     FontSize="24" FontWeight="Bold" Foreground="White">
                 Traffic Monitoring Dashboard
             </TextBlock>
         </Grid>
@@ -91,37 +98,52 @@
 
             <!-- Sidebar -->
             <StackPanel Background="#34495E" VerticalAlignment="Stretch">
-                <Button Content="Start Monitoring" Style="{StaticResource ButtonStyle}" Margin="10" HorizontalAlignment="Stretch" Click="btnStartMonitoring_Click"/>
-                <Button Content="Stop Monitoring" Style="{StaticResource ButtonStyle}" Margin="10" HorizontalAlignment="Stretch" Click="btnStopMonitoring_Click"/>
-                <Button Content="View Alerts" Style="{StaticResource ButtonStyle}" Margin="10" HorizontalAlignment="Stretch" Click="Button_Click"/>
+                <Button Content="Start Monitoring" Style="{StaticResource ButtonStyle}" 
+                        Margin="10" HorizontalAlignment="Stretch" 
+                        Command="{Binding StartMonitoringCommand}"/>
+                <Button Content="Stop Monitoring" Style="{StaticResource ButtonStyle}" 
+                        Margin="10" HorizontalAlignment="Stretch" 
+                        Command="{Binding StopMonitoringCommand}"/>
+                <Button Content="View Alerts" Style="{StaticResource ButtonStyle}" 
+                        Margin="10" HorizontalAlignment="Stretch" 
+                        Command="{Binding ShowAlertsCommand}"/>
             </StackPanel>
 
             <!-- Main Content Area -->
             <Grid Grid.Column="1">
-                <TabControl x:Name="TabControl">
+                <TabControl Visibility="{Binding MainContentVisibility}">
                     <TabItem Header="Live Traffic">
-                        <StackPanel Name="LiveTrafficPanel" Visibility="Visible">
-                            <TextBlock Text="Captured Packets" FontSize="18" FontWeight="Bold" Foreground="White" Margin="10"/>
-                            <DataGrid Name="PacketDataGrid" AutoGenerateColumns="True" Height="200" Margin="10" Background="#34495E" Foreground="Black" IsReadOnly="True"/>
-                            <TextBlock Name="TotalPagesTextBlock" FontSize="14" Foreground="White" Margin="10"/>
+                        <StackPanel Name="LiveTrafficPanel">
+                            <TextBlock Text="Captured Packets" FontSize="18" 
+                                     FontWeight="Bold" Foreground="White" Margin="10"/>
+                            <DataGrid ItemsSource="{Binding NetworkData}" 
+                                    AutoGenerateColumns="True" Height="200" 
+                                    Margin="10" Background="#34495E" 
+                                    Foreground="Black" IsReadOnly="True"/>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                <Button Content="Previous" Style="{StaticResource ButtonStyle}" Margin="5" Click="PrevPageButton_Click"/>
-                                <Button Content="Next" Style="{StaticResource ButtonStyle}" Margin="5" Click="NextPageButton_Click"/>
+                                <Button Content="Previous" Style="{StaticResource ButtonStyle}" 
+                                        Margin="5" Command="{Binding PreviousPageCommand}"/>
+                                <Button Content="Next" Style="{StaticResource ButtonStyle}" 
+                                        Margin="5" Command="{Binding NextPageCommand}"/>
                             </StackPanel>
                         </StackPanel>
                     </TabItem>
 
                     <TabItem Header="Traffic Trends">
-                        <StackPanel Name="TrafficTrendsPanel" Visibility="Visible" Margin="10">
-                            <TextBlock Text="Traffic Trends Over Time" FontSize="18" FontWeight="Bold" Foreground="White" Margin="0,0,0,10"/>
-                            <lvc:CartesianChart Name="TrafficChart" Height="300" Margin="0,0,0,10" Foreground="White">
-                                <!-- Serii de date pentru grafic -->
+                        <StackPanel Name="TrafficTrendsPanel" Margin="10">
+                            <TextBlock Text="Traffic Trends Over Time" FontSize="18" 
+                                     FontWeight="Bold" Foreground="White" Margin="0,0,0,10"/>
+                            <lvc:CartesianChart Height="300" Margin="0,0,0,10" Foreground="White">
                                 <lvc:CartesianChart.Series>
-                                    <lvc:LineSeries Title="Packet Count" PointGeometrySize="10" StrokeThickness="2" />
+                                    <lvc:LineSeries Title="Packet Count" 
+                                                  Values="{Binding PacketTrendValues}"
+                                                  PointGeometrySize="10" 
+                                                  StrokeThickness="2" />
                                 </lvc:CartesianChart.Series>
-                                <!-- Axele graficului -->
                                 <lvc:CartesianChart.AxisX>
-                                    <lvc:Axis Title="Time" Labels="{Binding TimeLabels}" Foreground="White">
+                                    <lvc:Axis Title="Time" 
+                                             Labels="{Binding TimeLabels}" 
+                                             Foreground="White">
                                         <lvc:Axis.Separator>
                                             <lvc:Separator Stroke="Gray" Step="1"/>
                                         </lvc:Axis.Separator>
@@ -136,60 +158,67 @@
                                 </lvc:CartesianChart.AxisY>
                             </lvc:CartesianChart>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                <Button Content="Refresh Data" Style="{StaticResource ButtonStyle}" Margin="5" Click="RefreshTrafficData_Click"/>
-                                <Button Content="Clear Data" Style="{StaticResource ButtonStyle}" Margin="5" Click="ClearTrafficData_Click"/>
+                                <Button Content="Refresh Data" Style="{StaticResource ButtonStyle}" 
+                                        Margin="5" Command="{Binding RefreshDataCommand}"/>
+                                <Button Content="Clear Data" Style="{StaticResource ButtonStyle}" 
+                                        Margin="5" Command="{Binding ClearDataCommand}"/>
                             </StackPanel>
                         </StackPanel>
                     </TabItem>
+
                     <TabItem Header="Report Event">
-                        <StackPanel Name="ReportEventPanel" Visibility="Visible" Margin="10">
-                            <ComboBox x:Name="PriorityLevelComboBox" Width="200">
-                                <ComboBoxItem Content="1 (Low)" IsSelected="True"/>
+                        <StackPanel Name="ReportEventPanel" Margin="10">
+                            <TextBlock Text="Report Name:" FontSize="14" 
+                                     Foreground="White" Margin="0,0,0,5"/>
+                            <TextBox Text="{Binding ReportName, UpdateSourceTrigger=PropertyChanged}" 
+                                   Height="30" Margin="0,0,0,10" Background="#34495E" 
+                                   Foreground="White"/>
+
+                            <TextBlock Text="Event Category:" FontSize="14" 
+                                     Foreground="White" Margin="0,0,0,5"/>
+                            <ComboBox SelectedValue="{Binding SelectedCategory}" Width="200">
+                                <ComboBoxItem Content="Network Issue"/>
+                                <ComboBoxItem Content="Suspicious Activity"/>
+                                <ComboBoxItem Content="System Failure"/>
+                                <ComboBoxItem Content="Other"/>
+                            </ComboBox>
+
+                            <TextBlock Text="Priority Level:" FontSize="14" 
+                                     Foreground="White" Margin="0,10,0,5"/>
+                            <ComboBox SelectedIndex="{Binding SelectedPriority}" Width="200">
+                                <ComboBoxItem Content="1 (Low)"/>
                                 <ComboBoxItem Content="2"/>
                                 <ComboBoxItem Content="3 (Medium)"/>
                                 <ComboBoxItem Content="4"/>
                                 <ComboBoxItem Content="5 (High)"/>
                             </ComboBox>
 
-                            <TextBlock Text="Event Category:" FontSize="14" Foreground="White" Margin="0,0,0,5"/>
-                            <ComboBox x:Name="EventCategoryComboBox" Width="200">
-                                <ComboBoxItem Content="Network Issue" IsSelected="True"/>
-                                <ComboBoxItem Content="Suspicious Activity"/>
-                                <ComboBoxItem Content="System Failure"/>
-                                <ComboBoxItem Content="Other"/>
-                            </ComboBox>
+                            <TextBlock Text="Description:" FontSize="14" 
+                                     Foreground="White" Margin="0,10,0,5"/>
+                            <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" 
+                                   AcceptsReturn="True" Height="100" Margin="0,0,0,10" 
+                                   Background="#34495E" Foreground="White" TextWrapping="Wrap"/>
 
-                            <!-- Numele raportului -->
-                            <TextBlock Text="Report Name:" FontSize="14" Foreground="White" Margin="0,0,0,5"/>
-                            <TextBox Name="ReportNameTextBox" Height="30" Margin="0,0,0,10" Background="#34495E" Foreground="White"/>
-
-                            <!-- Categoria evenimentului -->
-
-                            <!-- Nivelul de prioritate -->
-
-                            <!-- Descrierea evenimentului -->
-                            <TextBox Name="EventDescriptionTextBox" AcceptsReturn="True" Height="100" Margin="0,0,0,10" Background="#34495E" Foreground="White" TextWrapping="Wrap"/>
-
-                            <!-- Data evenimentului -->
-                            <!-- <TextBlock Text="Event Date:" FontSize="14" Foreground="White" Margin="0,0,0,5"/> -->
-                            <!-- <DatePicker Name="EventDatePicker" SelectedDate="{x:Static sys:DateTime.Now}" Margin="0,0,0,10"/> -->
-
-                            <!-- Buton pentru trimiterea raportului -->
-                            <Button Content="Submit Report" Style="{StaticResource ButtonStyle}" Margin="0,20,0,0" Click="SubmitReportButton_Click"/> 
+                            <Button Content="Submit Report" Style="{StaticResource ButtonStyle}" 
+                                    Margin="0,20,0,0" Command="{Binding SubmitReportCommand}"/>
                         </StackPanel>
                     </TabItem>
-
-
                 </TabControl>
-                <StackPanel Name="AlertsPanel" Visibility="Collapsed">
-                    <TextBlock Text="Alerts" FontSize="18" FontWeight="Bold" Foreground="White" Margin="10"/>
-                    <DataGrid Name="AlertsDataGrid" AutoGenerateColumns="False" Height="400" Margin="10"
-                 Background="#34495E" Foreground="Black" IsReadOnly="True">
+
+                <!-- Alerts Panel -->
+                <StackPanel Visibility="{Binding AlertsPanelVisibility}">
+                    <TextBlock Text="Alerts" FontSize="18" FontWeight="Bold" 
+                             Foreground="White" Margin="10"/>
+                    <DataGrid ItemsSource="{Binding Alerts}" AutoGenerateColumns="False" 
+                            Height="400" Margin="10" Background="#34495E" 
+                            Foreground="Black" IsReadOnly="True">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Alert Message" Binding="{Binding AlertMessage}" Width="*"/>
+                            <DataGridTextColumn Header="Alert Message" 
+                                              Binding="{Binding AlertMessage}" Width="*"/>
                         </DataGrid.Columns>
                     </DataGrid>
-                    <Button Content="Back to Dashboard" Style="{StaticResource ButtonStyle}" Margin="10" Click="Button_Click_1"/>
+                    <Button Content="Back to Dashboard" Style="{StaticResource ButtonStyle}" 
+                            Margin="10" Command="{Binding ShowDashboardCommand}"/>
                 </StackPanel>
             </Grid>
         </Grid>
