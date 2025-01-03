@@ -102,9 +102,6 @@
                 <Button Content="Add User" Style="{StaticResource ButtonStyle}" 
                         Margin="10" HorizontalAlignment="Stretch" 
                         Command="{Binding AddUserCommand}"/>
-                <Button Content="Remove User" Style="{StaticResource ButtonStyle}" 
-                        Margin="10" HorizontalAlignment="Stretch" 
-                        Command="{Binding RemoveUserCommand}"/>
                 <Button Content="Block Port" Style="{StaticResource ButtonStyle}" 
                         Margin="10" HorizontalAlignment="Stretch" 
                         Command="{Binding BlockPortCommand}"/>

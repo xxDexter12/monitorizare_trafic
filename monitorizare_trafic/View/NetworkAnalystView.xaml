@@ -1,0 +1,109 @@
+﻿<Window x:Class="monitorizare_trafic.View.NetworkAnalystView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:monitorizare_trafic.ViewModels"
+        mc:Ignorable="d"
+        Title="Network Traffic Analysis" Height="800" Width="1200"
+        WindowStartupLocation="CenterScreen">
+
+    <Window.DataContext>
+        <vm:NetworkAnalystViewModel/>
+    </Window.DataContext>
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Top Panel - Filters and Commands -->
+        <Grid Grid.Row="0" Margin="0,0,0,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Filters -->
+            <StackPanel Grid.Column="0" Orientation="Horizontal">
+                <TextBlock Text="From:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                <DatePicker SelectedDate="{Binding StartDate}" Margin="0,0,10,0"/>
+                <TextBlock Text="To:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                <DatePicker SelectedDate="{Binding EndDate}" Margin="0,0,10,0"/>
+            </StackPanel>
+
+            <!-- Command Buttons -->
+            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                <Button Content="Refresh" Command="{Binding RefreshDataCommand}" 
+                        Margin="5,0" Padding="10,5"/>
+                <Button Content="Generate Report" Command="{Binding GenerateReportCommand}"
+                        Margin="5,0" Padding="10,5"/>
+                <Button Content="Export Data" Command="{Binding ExportDataCommand}"
+                        Margin="5,0" Padding="10,5"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- Main Content -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Left Panel - Reports -->
+            <GroupBox Grid.Column="0" Header="Network Reports" Margin="0,0,5,0">
+                <DataGrid ItemsSource="{Binding Reports}"
+                         SelectedItem="{Binding SelectedReport}"
+                         AutoGenerateColumns="False"
+                         IsReadOnly="True"
+                         GridLinesVisibility="Horizontal"
+                         BorderThickness="1">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Date" Binding="{Binding CreatedDate}" Width="120"/>
+                        <DataGridTextColumn Header="Title" Binding="{Binding Title}" Width="*"/>
+                        <DataGridTextColumn Header="Category" Binding="{Binding Category}" Width="100"/>
+                        <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="80"/>
+                        <DataGridTextColumn Header="Priority" Binding="{Binding Priority}" Width="60"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </GroupBox>
+
+            <!-- Right Panel - Network Data and Analysis -->
+            <Grid Grid.Column="1" Margin="5,0,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Packet Data Panel -->
+                <GroupBox Header="Network Packet Data">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <DataGrid ItemsSource="{Binding PacketData}"
+                                AutoGenerateColumns="False"
+                                IsReadOnly="True"
+                                GridLinesVisibility="Horizontal"
+                                BorderThickness="1">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Time" Binding="{Binding Timestamp}"/>
+                                <DataGridTextColumn Header="Source IP" Binding="{Binding SourceIP}"/>
+                                <DataGridTextColumn Header="Destination IP" Binding="{Binding DestinationIP}"/>
+                                <DataGridTextColumn Header="Port" Binding="{Binding Port}"/>
+                                <DataGridTextColumn Header="Size (bytes)" Binding="{Binding DataSize}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                        <Button Grid.Row="1" Content="Analyze Packets" 
+                                Command="{Binding AnalyzePacketsCommand}"
+                                Margin="0,5,0,0" HorizontalAlignment="Right"/>
+                    </Grid>
+                </GroupBox>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>

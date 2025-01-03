@@ -12,7 +12,7 @@ namespace monitorizare_trafic.Models
     public class Report
     {
         [Column(IsPrimaryKey = true, IsDbGenerated = true)]
-        public int Id { get; set; }
+        public int ReportId { get; set; }
         [Column]
         public string Title { get; set; } // Numele raportului
         [Column]

@@ -91,7 +91,6 @@ namespace monitorizare_trafic.ViewModels
         {
             _trafficMonitor = new TrafficMonitor();
             _trafficMonitor.Analyzer = new TrafficAnalyzer();
-
             // Initialize Commands
             StartMonitoringCommand = new RelayCommand(_ => StartMonitoring());
             StopMonitoringCommand = new RelayCommand(_ => StopMonitoring());

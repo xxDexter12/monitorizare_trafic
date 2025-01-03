@@ -7,19 +7,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using System.Data.Entity;
+using monitorizare_trafic.Utils;
 
 namespace monitorizare_trafic.Services
 {
     public class TrafficMonitor
     {
         private ICaptureDevice _device;
-        public TrafficAnalyzer Analyzer=new TrafficAnalyzer();
+        private Manager _manager = new Manager();
+        public TrafficAnalyzer Analyzer = new TrafficAnalyzer();
         private BlackNurseDetector _blackNurseDetector = new BlackNurseDetector();
-        private List<NetworkData> _networkData = new List<NetworkData>();
-        public List<NetworkData> CollectTrafficData()
-        {
-            return _networkData;
-        }
+        public List<NetworkData> NetworkData = new List<NetworkData>();
         private int packetCount = 0;
         private ObservableCollection<NetworkData> trafficData = new ObservableCollection<NetworkData>();
 
@@ -27,13 +26,13 @@ namespace monitorizare_trafic.Services
         {
             var devices = CaptureDeviceList.Instance;
 
-            if(devices.Count<1)
+            if (devices.Count < 1)
             {
                 Console.WriteLine("No devices found.");
                 return;
             }
 
-            for(int i = 0; i < devices.Count; i++)
+            for (int i = 0; i < devices.Count; i++)
             {
                 Console.WriteLine($"Device number: {i}\n Device: {devices[i].Description}");
 
@@ -52,7 +51,7 @@ namespace monitorizare_trafic.Services
         }
         public event Action<NetworkData> PacketCaptured;
         private void OnPacketArrival(object sender, PacketCapture e)
-        {   
+        {
             //if(this.packetCount==10)
             //{
             //    StopMonitoring();
@@ -73,15 +72,15 @@ namespace monitorizare_trafic.Services
 
                     Analyzer.UpdateTrafficTrends(packetCount);
                     int destPort = -1;
-                    if(ipPacket.Protocol==ProtocolType.Tcp)
+                    if (ipPacket.Protocol == ProtocolType.Tcp)
                     {
                         destPort = packet.Extract<TcpPacket>().DestinationPort;
                     }
-                    else if (ipPacket.Protocol==ProtocolType.Udp)
+                    else if (ipPacket.Protocol == ProtocolType.Udp)
                     {
-                        destPort= packet.Extract<UdpPacket>().DestinationPort;
+                        destPort = packet.Extract<UdpPacket>().DestinationPort;
                     }
-                    else if(ipPacket.Protocol==ProtocolType.Icmp)
+                    else if (ipPacket.Protocol == ProtocolType.Icmp)
                     {
                         _blackNurseDetector.AddIcmpPacket(sourceIP, packet.Extract<IcmpV4Packet>());
                     }
@@ -94,12 +93,14 @@ namespace monitorizare_trafic.Services
                     // Adaugă un nou obiect în colecția ObservableCollection
                     NetworkData packetData = new NetworkData
                     {
-                        Index = packetCount,
+                        Id = packetCount,
                         SourceIP = sourceIP,
                         DestinationIP = destIP,
                         Port = destPort,
                         DataSize = packetSize
                     };
+
+                    _manager.AddNetworkData(packetData);
 
                     // Trimite evenimentul
                     PacketCaptured?.Invoke(packetData);
@@ -107,7 +108,7 @@ namespace monitorizare_trafic.Services
                     //Console.WriteLine($"Packet captured: {sourceIP} -> {destIP}, Size: {packetSize} bytes");
                 }
 
-               }
+            }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error parsing packet: {ex.Message}");
@@ -122,6 +123,13 @@ namespace monitorizare_trafic.Services
             Console.WriteLine("Capture stopped.");
         }
 
+        public List<NetworkData> GetNetworkData()
+        {
+            using (var context=_manager.GetDataContext())
+            {
+                return context.GetTable<NetworkData>().ToList();
+            }
+        }
 
     }
 }

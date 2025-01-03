@@ -14,7 +14,7 @@ namespace monitorizare_trafic.ViewModel
         private string _username;
         private string _password;
         private readonly Manager _manager;
-
+        User user=new User();
         public string Username
         {
             get => _username;
@@ -61,7 +61,7 @@ namespace monitorizare_trafic.ViewModel
 
             using (var db = _manager.GetDataContext())
             {
-                var user = db.GetTable<User>().FirstOrDefault(u => u.Username == Username && u.Password == passwordHash);
+                user = db.GetTable<User>().FirstOrDefault(u => u.Username == Username && u.Password == passwordHash);
 
                 if (user != null)
                 {
@@ -78,17 +78,16 @@ namespace monitorizare_trafic.ViewModel
         private void OpenAppropriateWindow(string role)
         {
             Window window = null;
-
             switch (role)
             {
                 case "Admin":
-                    window = new AdministratorView();
+                    window = new AdministratorView(user);
                     break;
                 case "Analyst":
-                    //window = new AnalystView();
+                    window = new NetworkAnalystView(user);
                     break;
                 case "User":
-                    window = new UserView();
+                    window = new UserView(user);
                     break;
                 default:
                     MessageBox.Show("Unknown role.");

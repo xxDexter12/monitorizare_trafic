@@ -13,7 +13,7 @@ namespace monitorizare_trafic.ViewModel
         private readonly NetworkAdmin _networkAdmin;
         private ObservableCollection<User> _users;
         private User _selectedUser;
-
+        public User CurrentUser { get; set; }
         public ObservableCollection<User> Users
         {
             get => _users;

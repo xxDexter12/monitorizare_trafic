@@ -52,6 +52,15 @@ CREATE TABLE Reports (
     CONSTRAINT FK_Reports_Users FOREIGN KEY (CreatedBy) REFERENCES Users(UserId) ON DELETE CASCADE
 );
 
+CREATE TABLE NetworkData (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    SourceIP VARCHAR(15) NOT NULL,
+    DestinationIP VARCHAR(15) NOT NULL,
+    DataSize INT NOT NULL,
+    Port INT NOT NULL,
+    Timestamp DATETIME DEFAULT GETDATE() NOT NULL
+);
+
 INSERT INTO Users (Username, Password, Role, Email, IsActive)
 VALUES 
 ('admin','8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 'Admin', 'admin@example.com', 1),

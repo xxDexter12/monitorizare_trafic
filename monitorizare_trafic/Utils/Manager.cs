@@ -30,6 +30,14 @@ namespace monitorizare_trafic.Utils
             }
         }
 
+        public List<Report> GetAllReports()
+        {
+            using (var context=GetDataContext())
+            {
+                return context.GetTable<Report>().ToList();
+            }
+        }
+
         // Metodă pentru a adăuga un utilizator
         public void AddUser(User newUser)
         {
@@ -37,6 +45,15 @@ namespace monitorizare_trafic.Utils
             {
                 context.GetTable<User>().InsertOnSubmit(newUser);
                 context.SubmitChanges(); // Salvează modificările în baza de date
+            }
+        }
+
+        public void AddNetworkData(NetworkData networkData)
+        {
+            using (var context=GetDataContext())
+            {
+                context.GetTable<NetworkData>().InsertOnSubmit(networkData);
+                context.SubmitChanges();
             }
         }
 
