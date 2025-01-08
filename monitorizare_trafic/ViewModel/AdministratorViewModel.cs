@@ -43,6 +43,10 @@ namespace monitorizare_trafic.ViewModel
         public ICommand DisableProtectionCommand { get; }
         public ICommand MinimizeCommand { get; }
         public ICommand CloseCommand { get; }
+        public ICommand AddToWhitelistCommand { get; }
+        public ICommand AddToBlacklistCommand { get; }
+        public ICommand RemoveFromWhitelistCommand { get; }
+        public ICommand RemoveFromBlacklistCommand { get; }
 
         public AdministratorViewModel()
         {
@@ -57,6 +61,18 @@ namespace monitorizare_trafic.ViewModel
             DisableProtectionCommand = new RelayCommand(DisableProtection);
             MinimizeCommand = new RelayCommand(Minimize);
             CloseCommand = new RelayCommand(Close);
+            AddToWhitelistCommand = new RelayCommand(AddToWhitelist);
+            AddToBlacklistCommand = new RelayCommand(AddToBlacklist);
+            RemoveFromWhitelistCommand = new RelayCommand(RemoveFromWhitelist);
+            RemoveFromBlacklistCommand = new RelayCommand(RemoveFromBlacklist);
+            WhitelistedAddresses = new ObservableCollection<AddressListEntry>(_networkAdmin.GetAddresses("Whitelist"));
+            BlacklistedAddresses = new ObservableCollection<AddressListEntry>(_networkAdmin.GetAddresses("Blacklist"));
+
+            // Inițializează comenzile
+            AddToWhitelistCommand = new RelayCommand(AddToWhitelist);
+            AddToBlacklistCommand = new RelayCommand(AddToBlacklist);
+            RemoveFromWhitelistCommand = new RelayCommand(RemoveFromWhitelist, CanRemoveFromWhitelist);
+            RemoveFromBlacklistCommand = new RelayCommand(RemoveFromBlacklist, CanRemoveFromBlacklist);
 
             // Load users initially
             LoadUsers();
@@ -114,6 +130,216 @@ namespace monitorizare_trafic.ViewModel
                 catch (Exception ex)
                 {
                     MessageBox.Show($"Error deleting user: {ex.Message}");
+                }
+            }
+        }
+        private ObservableCollection<NetworkPort> _activePorts; 
+        public ObservableCollection<NetworkPort> ActivePorts
+        {
+            get => _activePorts;
+            set
+            {
+                _activePorts = value;
+                OnPropertyChanged(nameof(ActivePorts));
+            }
+        }
+        private ObservableCollection<AddressListEntry> _whitelistedAddresses;
+        private ObservableCollection<AddressListEntry> _blacklistedAddresses;
+
+        public ObservableCollection<AddressListEntry> WhitelistedAddresses
+        {
+            get => _whitelistedAddresses;
+            set
+            {
+                _whitelistedAddresses = value;
+                OnPropertyChanged(nameof(WhitelistedAddresses));
+            }
+        }
+
+        public ObservableCollection<AddressListEntry> BlacklistedAddresses
+        {
+            get => _blacklistedAddresses;
+            set
+            {
+                _blacklistedAddresses = value;
+                OnPropertyChanged(nameof(BlacklistedAddresses));
+            }
+        }
+
+        private AddressListEntry _selectedWhitelistedAddress;
+        private AddressListEntry _selectedBlacklistedAddress;
+
+        public AddressListEntry SelectedWhitelistedAddress
+        {
+            get => _selectedWhitelistedAddress;
+            set
+            {
+                _selectedWhitelistedAddress = value;
+                OnPropertyChanged(nameof(SelectedWhitelistedAddress));
+                (RemoveFromWhitelistCommand as RelayCommand)?.RaiseCanExecuteChanged();
+            }
+        }
+
+        public AddressListEntry SelectedBlacklistedAddress
+        {
+            get => _selectedBlacklistedAddress;
+            set
+            {
+                _selectedBlacklistedAddress = value;
+                OnPropertyChanged(nameof(SelectedBlacklistedAddress));
+                (RemoveFromBlacklistCommand as RelayCommand)?.RaiseCanExecuteChanged();
+            }
+        }
+
+        private bool CanRemoveFromWhitelist()
+        {
+            return SelectedWhitelistedAddress != null;
+        }
+
+        private bool CanRemoveFromBlacklist()
+        {
+            return SelectedBlacklistedAddress != null;
+        }
+
+        private string _newWhitelistAddress;
+        public string NewWhitelistAddress
+        {
+            get => _newWhitelistAddress;
+            set
+            {
+                _newWhitelistAddress = value;
+                OnPropertyChanged(nameof(NewWhitelistAddress));
+            }
+        }
+
+        private string _newBlacklistAddress;
+        public string NewBlacklistAddress
+        {
+            get => _newBlacklistAddress;
+            set
+            {
+                _newBlacklistAddress = value;
+                OnPropertyChanged(nameof(NewBlacklistAddress));
+            }
+        }
+        private void AddToWhitelist()
+        {
+            if (string.IsNullOrWhiteSpace(NewWhitelistAddress))
+            {
+                MessageBox.Show("Address cannot be empty.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            try
+            {
+                var entry = new AddressListEntry
+                {
+                    Address = NewWhitelistAddress,
+                    Type = "IP Address", // Sau "Domain" dacă e cazul
+                    ListType = "Whitelist",
+                    DateAdded = DateTime.Now
+                };
+
+                _networkAdmin.AddAddressToList(entry);
+                WhitelistedAddresses.Add(entry);
+
+                // Golește câmpul TextBox
+                NewWhitelistAddress = string.Empty;
+
+                MessageBox.Show("Address added to whitelist.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error adding to whitelist: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void AddToBlacklist()
+        {
+            if (string.IsNullOrWhiteSpace(NewBlacklistAddress))
+            {
+                MessageBox.Show("Address cannot be empty.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            try
+            {
+                var entry = new AddressListEntry
+                {
+                    Address = NewBlacklistAddress,
+                    Type = "IP Address", // Sau "Domain" dacă e cazul
+                    ListType = "Blacklist",
+                    DateAdded = DateTime.Now
+                };
+
+                _networkAdmin.AddAddressToList(entry);
+                BlacklistedAddresses.Add(entry);
+
+                // Golește câmpul TextBox
+                NewBlacklistAddress = string.Empty;
+
+                MessageBox.Show("Address added to blacklist.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error adding to blacklist: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void RemoveFromWhitelist()
+        {
+            if (SelectedWhitelistedAddress == null) return;
+
+            var result = MessageBox.Show(
+                $"Are you sure you want to remove {SelectedWhitelistedAddress.Address} from the whitelist?",
+                "Remove Confirmation",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                try
+                {
+                    // Elimină din baza de date
+                    _networkAdmin.RemoveAddressFromList(SelectedWhitelistedAddress);
+
+                    // Elimină din colecția locală
+                    WhitelistedAddresses.Remove(SelectedWhitelistedAddress);
+
+                    MessageBox.Show("Address removed from whitelist.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error removing from whitelist: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+        private void RemoveFromBlacklist()
+        {
+            if (SelectedBlacklistedAddress == null) return;
+
+            var result = MessageBox.Show(
+                $"Are you sure you want to remove {SelectedBlacklistedAddress.Address} from the blacklist?",
+                "Remove Confirmation",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                try
+                {
+                    // Elimină din baza de date
+                    _networkAdmin.RemoveAddressFromList(SelectedBlacklistedAddress);
+
+                    // Elimină din colecția locală
+                    BlacklistedAddresses.Remove(SelectedBlacklistedAddress);
+
+                    MessageBox.Show("Address removed from blacklist.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error removing from blacklist: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }

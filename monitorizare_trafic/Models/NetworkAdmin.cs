@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using monitorizare_trafic.Utils;
 using monitorizare_trafic.Models;
+using System.Collections.ObjectModel;
+using System.Data.SqlClient;
+using System.Linq;
 
 namespace monitorizare_trafic.Models
 {
@@ -13,12 +16,58 @@ namespace monitorizare_trafic.Models
         {
             _manager = new Manager();
         }
+        public void AddAddressToList(AddressListEntry entry)
+        {
+            Manager manager = new Manager();
+            using (var context = manager.GetDataContext())
+            {
+                context.GetTable<AddressListEntry>().InsertOnSubmit(entry);
+                context.SubmitChanges();
+            }
+        }
+        public List<AddressListEntry> GetAddresses(string listType)
+        {
+            Manager manager = new Manager();
+            using (var context = manager.GetDataContext())
+            {
+                return context.GetTable<AddressListEntry>()
+                    .Where(a => a.ListType == listType)
+                    .ToList();
+            }
+        }
 
         // Funcție pentru vizualizarea tuturor utilizatorilor
         public List<User> GetUsers()
         {
             return _manager.GetAllUsers();
         }
+        public ObservableCollection<NetworkPort> GetActivePorts()
+        {
+            // Simulate getting active ports - replace with actual implementation
+            return new ObservableCollection<NetworkPort>
+        {
+            new NetworkPort { PortNumber = 80, Status = "Open", Service = "HTTP", Protocol = "TCP" },
+            new NetworkPort { PortNumber = 443, Status = "Open", Service = "HTTPS", Protocol = "TCP" },
+            // Add more ports as needed
+        };
+        }
+        public void RemoveAddressFromList(AddressListEntry entry)
+        {
+            Manager manager = new Manager();
+            using (var context = manager.GetDataContext())
+            {
+                var addressToRemove = context.GetTable<AddressListEntry>()
+                    .FirstOrDefault(a => a.Id == entry.Id);
+
+                if (addressToRemove != null)
+                {
+                    context.GetTable<AddressListEntry>().DeleteOnSubmit(addressToRemove);
+                    context.SubmitChanges();
+                }
+            }
+        }
+
+
 
         // Funcție pentru adăugarea unui utilizator
         public void AddUser(User newUser)

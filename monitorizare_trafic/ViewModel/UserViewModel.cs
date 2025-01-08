@@ -46,28 +46,41 @@ namespace monitorizare_trafic.ViewModels
         }
 
         // Report Properties
-        private string _reportName;
+        private string _reportName = string.Empty;
         public string ReportName
         {
             get => _reportName;
             set => SetProperty(ref _reportName, value);
         }
 
-        private string _selectedCategory;
+        private string _selectedCategory = null;
         public string SelectedCategory
         {
             get => _selectedCategory;
             set => SetProperty(ref _selectedCategory, value);
         }
 
-        private int _selectedPriority = 1;
+
+        public bool IsValidCategory => !string.IsNullOrEmpty(_selectedCategory) &&
+                                    _selectedCategory != "Select report category...";
+
+
+        private int _selectedPriority = -1;
         public int SelectedPriority
         {
             get => _selectedPriority;
-            set => SetProperty(ref _selectedPriority, value);
+            set
+            {
+                if (SetProperty(ref _selectedPriority, value))
+                {
+                    // Optional: Add any validation or additional logic when priority changes
+                    OnPropertyChanged(nameof(IsValidPriority));
+                }
+            }
         }
+        public bool IsValidPriority => _selectedPriority >= 0;
 
-        private string _description;
+        private string _description = string.Empty;
         public string Description
         {
             get => _description;
@@ -189,6 +202,13 @@ namespace monitorizare_trafic.ViewModels
             TimeLabels.Clear();
         }
 
+        private bool CanSubmitReport()
+        {
+            return !string.IsNullOrWhiteSpace(ReportName) &&
+                   IsValidCategory &&
+                   IsValidPriority &&
+                   !string.IsNullOrWhiteSpace(Description);
+        }
         private void SubmitReport()
         {
             if (string.IsNullOrWhiteSpace(ReportName) || string.IsNullOrWhiteSpace(SelectedCategory))
@@ -227,7 +247,7 @@ namespace monitorizare_trafic.ViewModels
         {
             ReportName = string.Empty;
             SelectedCategory = null;
-            SelectedPriority = 1;
+            SelectedPriority = -1;
             Description = string.Empty;
         }
 

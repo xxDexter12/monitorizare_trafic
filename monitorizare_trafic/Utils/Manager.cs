@@ -13,7 +13,7 @@ namespace monitorizare_trafic.Utils
         public string GetConnectionString()
         {
             
-            return "Server=DESKTOP-UMU84AP\\SQLEXPRESS;Database=IDSDB;Trusted_Connection=True;";//DESKTOP-MJ5QMKE\SQLEXPRESS , DESKTOP-UMU84AP\\SQLEXPRESS
+            return "Server=DESKTOP-MJ5QMKE\\SQLEXPRESS;Database=IDSDB;Trusted_Connection=True;";//DESKTOP-MJ5QMKE\SQLEXPRESS , DESKTOP-UMU84AP\\SQLEXPRESS
         }
 
         public DataContext GetDataContext()

@@ -94,10 +94,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Models\AdressListEntry.cs" />
     <Compile Include="Models\Alert.cs" />
     <Compile Include="Models\BasicUser.cs" />
     <Compile Include="Models\NetworkAdmin.cs" />
     <Compile Include="Models\NetworkAnalyst.cs" />
+    <Compile Include="Models\NetworkPort.cs" />
     <Compile Include="Models\Report.cs" />
     <Compile Include="Models\TrafficTrend.cs" />
     <Compile Include="Services\ActivityRepository.cs" />
@@ -107,6 +109,7 @@
     <Compile Include="Services\TrafficMonitor.cs" />
     <Compile Include="Utils\Logger.cs" />
     <Compile Include="Utils\Manager.cs" />
+    <Compile Include="Utils\NullOrEmptyToVisibilityConverter.cs" />
     <Compile Include="Utils\PasswordBoxHelper.cs" />
     <Compile Include="Utils\SecurityHelper.cs" />
     <Compile Include="ViewModel\AdministratorViewModel.cs" />
