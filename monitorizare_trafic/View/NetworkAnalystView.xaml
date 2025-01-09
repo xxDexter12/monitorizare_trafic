@@ -71,38 +71,63 @@
 
             <!-- Right Panel - Network Data and Analysis -->
             <Grid Grid.Column="1" Margin="5,0,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="7*"/>
+                    <ColumnDefinition Width="2*"/>
+                </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
                 <!-- Packet Data Panel -->
-                <GroupBox Header="Network Packet Data">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-
-                        <DataGrid ItemsSource="{Binding PacketData}"
-                                AutoGenerateColumns="False"
-                                IsReadOnly="True"
-                                GridLinesVisibility="Horizontal"
-                                BorderThickness="1">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="Time" Binding="{Binding Timestamp}"/>
-                                <DataGridTextColumn Header="Source IP" Binding="{Binding SourceIP}"/>
-                                <DataGridTextColumn Header="Destination IP" Binding="{Binding DestinationIP}"/>
-                                <DataGridTextColumn Header="Port" Binding="{Binding Port}"/>
-                                <DataGridTextColumn Header="Size (bytes)" Binding="{Binding DataSize}"/>
-                            </DataGrid.Columns>
-                        </DataGrid>
-
-                        <Button Grid.Row="1" Content="Analyze Packets" 
-                                Command="{Binding AnalyzePacketsCommand}"
-                                Margin="0,5,0,0" HorizontalAlignment="Right"/>
-                    </Grid>
+                <GroupBox Grid.Row="0" Header="Network Packet Data" Grid.ColumnSpan="2" Margin="0,0,0,360" Grid.RowSpan="2">
+                    <DataGrid ItemsSource="{Binding PacketData}"
+          SelectionMode="Extended"
+          SelectionChanged="DataGrid_SelectionChanged"
+          AutoGenerateColumns="False"
+          IsReadOnly="True"
+          Name="PacketDataGrid"
+          GridLinesVisibility="Horizontal"
+          BorderThickness="1">
+                        <DataGrid.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Add to Suspicious Packets" 
+                     Command="{Binding AddToSuspiciousCommand}"/>
+                            </ContextMenu>
+                        </DataGrid.ContextMenu>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Time" Binding="{Binding Timestamp}"/>
+                            <DataGridTextColumn Header="Source IP" Binding="{Binding SourceIP}"/>
+                            <DataGridTextColumn Header="Destination IP" Binding="{Binding DestinationIP}"/>
+                            <DataGridTextColumn Header="Port" Binding="{Binding Port}"/>
+                            <DataGridTextColumn Header="Size (bytes)" Binding="{Binding DataSize}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
                 </GroupBox>
+
+                <!-- Suspicious Packets Panel -->
+                <GroupBox Grid.Row="1" Header="Suspicious Packets" Grid.ColumnSpan="2">
+                    <DataGrid ItemsSource="{Binding SuspiciousPackets}"
+                AutoGenerateColumns="False"
+                IsReadOnly="True"
+                GridLinesVisibility="Horizontal"
+                BorderThickness="1">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Time" Binding="{Binding Timestamp}"/>
+                            <DataGridTextColumn Header="Source IP" Binding="{Binding SourceIP}"/>
+                            <DataGridTextColumn Header="Destination IP" Binding="{Binding DestinationIP}"/>
+                            <DataGridTextColumn Header="Port" Binding="{Binding Port}"/>
+                            <DataGridTextColumn Header="Size (bytes)" Binding="{Binding DataSize}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </GroupBox>
+
+                <!-- Buttons -->
+                <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,5,0,0" Grid.Column="1">
+
+                </StackPanel>
             </Grid>
         </Grid>
     </Grid>

@@ -97,6 +97,7 @@
     <Compile Include="Models\AdressListEntry.cs" />
     <Compile Include="Models\Alert.cs" />
     <Compile Include="Models\BasicUser.cs" />
+    <Compile Include="Models\EventReport.cs" />
     <Compile Include="Models\NetworkAdmin.cs" />
     <Compile Include="Models\NetworkAnalyst.cs" />
     <Compile Include="Models\NetworkPort.cs" />

@@ -9,6 +9,10 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 //using Microsoft.EntityFrameworkCore;
 using monitorizare_trafic.Services;
+using System.Text;
+using System.Data.Linq;
+using monitorizare_trafic.Utils;
+
 
 namespace monitorizare_trafic.ViewModels
 {
@@ -70,32 +74,82 @@ namespace monitorizare_trafic.ViewModels
         public ICommand AnalyzePacketsCommand { get; }
         public ICommand GenerateReportCommand { get; }
         public ICommand RefreshDataCommand { get; }
-
+        private readonly Manager _manager;
         public NetworkAnalystViewModel()
         {
             _context = new TrafficMonitor();
+            _manager = new Manager();
             _networkAnalyst = new NetworkAnalyst();
+            SuspiciousPackets = new ObservableCollection<NetworkData>();
             // Initialize commands
             ExportDataCommand = new RelayCommand(ExportData);
             AnalyzePacketsCommand = new RelayCommand(AnalyzePackets);
             GenerateReportCommand = new RelayCommand(GenerateReport);
             //RefreshDataCommand = new RelayCommand(async _ => await LoadData());
 
+            _selectedPackets = new List<NetworkData>();
+            AddToSuspiciousCommand = new RelayCommand(AddToSuspicious, CanAddToSuspicious);
+            _context = new TrafficMonitor();
+            _networkAnalyst = new NetworkAnalyst();
+            SuspiciousPackets = new ObservableCollection<NetworkData>();
+
             // Initial data load
             LoadData();
+        }
+
+
+        public void UpdateSelectedPackets(List<NetworkData> selectedItems)
+        {
+            SelectedPackets = selectedItems ?? new List<NetworkData>();
+        }
+
+        private bool CanAddToSuspicious(object parameter)
+        {
+            return SelectedPackets != null && SelectedPackets.Any();
+        }
+
+        private void AddToSuspicious(object parameter)
+        {
+            if (SelectedPackets == null || !SelectedPackets.Any()) return;
+
+            foreach (var packet in SelectedPackets)
+            {
+                if (!SuspiciousPackets.Contains(packet))
+                {
+                    SuspiciousPackets.Add(packet);
+                }
+            }
         }
 
         private void LoadData()
         {
             try
             {
-                // Load Reports
-                var reportList = _networkAnalyst.GetReports();
+                // Load Reports and filter out those without packets
+                var reportList = _networkAnalyst.GetReports()
+                    .Where(report => HasPacketsForReport(report))
+                    .ToList();
                 Reports = new ObservableCollection<Report>(reportList);
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error loading Reports: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        private bool HasPacketsForReport(Report report)
+        {
+            return _context.GetNetworkData()
+                .Any(p => p.Timestamp.Date == report.CreatedDate.Date);
+        }
+        public ICommand AddToSuspiciousCommand { get; }
+        private List<NetworkData> _selectedPackets;
+        public List<NetworkData> SelectedPackets
+        {
+            get => _selectedPackets;
+            private set
+            {
+                _selectedPackets = value;
+                OnPropertyChanged(nameof(SelectedPackets));
             }
         }
 
@@ -155,13 +209,112 @@ namespace monitorizare_trafic.ViewModels
                           MessageBoxButton.OK,
                           MessageBoxImage.Information);
         }
+        private ObservableCollection<NetworkData> _suspiciousPackets;
+        public ObservableCollection<NetworkData> SuspiciousPackets
+        {
+            get => _suspiciousPackets;
+            set
+            {
+                _suspiciousPackets = value;
+                OnPropertyChanged(nameof(SuspiciousPackets));
+            }
+        }
 
         private void GenerateReport(object parameter)
         {
-            // TODO: Implement report generation logic
-            MessageBox.Show("Report generation not implemented yet.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+            if (SelectedReport == null)
+            {
+                MessageBox.Show("Selectați un raport pentru a continua.",
+                    "Avertizare", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            try
+            {
+                // Use the existing suspicious packets instead of analyzing again
+                var suspiciousPacketsList = SuspiciousPackets.ToList();
+
+                // Create the event report using actual suspicious packets from the UI
+                var eventReport = new EventReport
+                {
+                    ReportId = SelectedReport.ReportId,
+                    AnalystComments = GenerateAnalysisContent(PacketData.ToList(), suspiciousPacketsList),
+                    // Convert suspicious packets to the required format
+                    SuspiciousPackets = string.Join(",", suspiciousPacketsList.Select(p =>
+                        $"{p.SourceIP}->{p.DestinationIP}:{p.Port}:{p.DataSize}")),
+                    CreatedDate = DateTime.Now,
+                    AnalystId = CurrentUser?.UserId ?? 0
+                };
+
+                // Save to database
+                _manager.AddEventReport(eventReport);
+                _manager.UpdateReportStatus(SelectedReport.ReportId, "Resolved");
+
+                // Reload data
+                LoadData();
+
+                MessageBox.Show("Raport generat și salvat cu succes!",
+                    "Succes", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Eroare la salvarea raportului: {ex.Message}",
+                    "Eroare", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+
+        private List<NetworkData> AnalyzeSuspiciousPackets(List<NetworkData> packets)
+        {
+            var suspicious = new List<NetworkData>();
+
+            foreach (var packet in packets)
+            {
+                if (IsSuspiciousPort(packet.Port) ||
+                    IsUnusualDataSize(packet.DataSize))
+                {
+                    suspicious.Add(packet);
+                }
+            }
+
+            return suspicious;
+        }
+
+        private string GenerateAnalysisContent(List<NetworkData> allPackets, List<NetworkData> suspiciousPackets)
+        {
+            var sb = new StringBuilder();
+
+            sb.AppendLine($"Analiză trafic pentru raportul: {SelectedReport.Title}");
+            sb.AppendLine($"Data analizei: {DateTime.Now}");
+            sb.AppendLine($"Total pachete analizate: {allPackets.Count}");
+            sb.AppendLine($"Pachete suspecte detectate: {suspiciousPackets.Count}");
+
+            if (suspiciousPackets.Any())
+            {
+                sb.AppendLine("\nDetalii pachete suspecte:");
+                foreach (var packet in suspiciousPackets)
+                {
+                    sb.AppendLine($"- Pachet suspect de la {packet.SourceIP} către {packet.DestinationIP}");
+                    sb.AppendLine($"  Port: {packet.Port}, Mărime: {packet.DataSize} bytes");
+                    sb.AppendLine($"  Timestamp: {packet.Timestamp}");
+                }
+            }
+
+            return sb.ToString();
+        }
+
+        private bool IsSuspiciousPort(int port)
+        {
+            int[] suspiciousPorts = { 31337, 12345, 27374, 31338, 31339 };
+            return suspiciousPorts.Contains(port);
+        }
+
+        private bool IsUnusualDataSize(int size)
+        {
+            return size > 65000 || size == 1234;
         }
     }
+
 
     public class PacketAnalysis
     {

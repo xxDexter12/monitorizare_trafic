@@ -71,5 +71,29 @@ namespace monitorizare_trafic.Utils
             }
         }
 
+        public void AddEventReport(EventReport eventReport)
+        {
+            using (var context = GetDataContext())
+            {
+                context.GetTable<EventReport>().InsertOnSubmit(eventReport);
+                context.SubmitChanges();
+            }
+        }
+
+        public void UpdateReportStatus(int reportId, string newStatus)
+        {
+            using (var context = GetDataContext())
+            {
+                var report = context.GetTable<Report>().FirstOrDefault(r => r.ReportId == reportId);
+                if (report != null)
+                {
+                    report.Status = newStatus;
+                    context.SubmitChanges();
+                }
+            }
+        }
+
+
+
     }
 }
