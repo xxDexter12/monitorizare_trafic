@@ -61,6 +61,17 @@ CREATE TABLE NetworkData (
     Timestamp DATETIME DEFAULT GETDATE() NOT NULL
 );
 
+CREATE TABLE EventReports (
+    EventReportId INT IDENTITY(1,1) PRIMARY KEY,
+    ReportId INT NOT NULL,
+    AnalystComments NVARCHAR(MAX),
+    SuspiciousPackets NVARCHAR(MAX),
+    CreatedDate DATETIME DEFAULT GETDATE(),
+    AnalystId INT,
+    FOREIGN KEY (ReportId) REFERENCES Reports(ReportId),
+    FOREIGN KEY (AnalystId) REFERENCES Users(UserId)
+)
+
 INSERT INTO Users (Username, Password, Role, Email, IsActive)
 VALUES 
 ('admin','8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 'Admin', 'admin@example.com', 1),

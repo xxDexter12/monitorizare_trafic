@@ -288,6 +288,22 @@
                             </StackPanel>
                         </ScrollViewer>
                     </TabItem>
+                    <TabItem Header="Event Reports">
+                        <StackPanel Margin="10">
+                            <TextBlock Text="Event Reports" FontSize="18" FontWeight="Bold" Foreground="White" Margin="0,0,0,10"/>
+                            <Button Content="Refresh Reports" Style="{StaticResource ButtonStyle}" Command="{Binding ViewEventReportsCommand}" Margin="0,0,0,10"/>
+                            <DataGrid ItemsSource="{Binding EventReports}"
+                  AutoGenerateColumns="False" Height="400" Margin="10" Background="#34495E" Foreground="Black" IsReadOnly="True">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Event ID" Binding="{Binding EventReportId}"/>
+                                    <DataGridTextColumn Header="Report ID" Binding="{Binding ReportId}"/>
+                                    <DataGridTextColumn Header="Comments" Binding="{Binding AnalystComments}"/>
+                                    <DataGridTextColumn Header="Suspicious Packets" Binding="{Binding SuspiciousPackets}"/>
+                                    <DataGridTextColumn Header="Created Date" Binding="{Binding CreatedDate}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </StackPanel>
+                    </TabItem>
                 </TabControl>
             </Grid>
         </Grid>

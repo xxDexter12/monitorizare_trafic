@@ -12,6 +12,7 @@ namespace monitorizare_trafic.ViewModel
     {
         private readonly NetworkAdmin _networkAdmin;
         private ObservableCollection<User> _users;
+        private ObservableCollection<EventReport> _eventReports;
         private User _selectedUser;
         public User CurrentUser { get; set; }
         public ObservableCollection<User> Users
@@ -21,6 +22,15 @@ namespace monitorizare_trafic.ViewModel
             {
                 _users = value;
                 OnPropertyChanged(nameof(Users));
+            }
+        }
+        public ObservableCollection<EventReport> EventReports
+        {
+            get => _eventReports;
+            set
+            {
+                _eventReports = value;
+                OnPropertyChanged(nameof(EventReports));
             }
         }
 
@@ -47,6 +57,8 @@ namespace monitorizare_trafic.ViewModel
         public ICommand AddToBlacklistCommand { get; }
         public ICommand RemoveFromWhitelistCommand { get; }
         public ICommand RemoveFromBlacklistCommand { get; }
+        public ICommand ViewEventReportsCommand { get; }
+
 
         public AdministratorViewModel()
         {
@@ -67,6 +79,7 @@ namespace monitorizare_trafic.ViewModel
             RemoveFromBlacklistCommand = new RelayCommand(RemoveFromBlacklist);
             WhitelistedAddresses = new ObservableCollection<AddressListEntry>(_networkAdmin.GetAddresses("Whitelist"));
             BlacklistedAddresses = new ObservableCollection<AddressListEntry>(_networkAdmin.GetAddresses("Blacklist"));
+            ViewEventReportsCommand = new RelayCommand(LoadEventReports);
 
             // Inițializează comenzile
             AddToWhitelistCommand = new RelayCommand(AddToWhitelist);
@@ -78,6 +91,18 @@ namespace monitorizare_trafic.ViewModel
             LoadUsers();
         }
 
+        private void LoadEventReports()
+        {
+            try
+            {
+                var reports = _networkAdmin.GetEventReports();
+                EventReports = new ObservableCollection<EventReport>(reports);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading event reports: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
         private void LoadUsers()
         {
             try

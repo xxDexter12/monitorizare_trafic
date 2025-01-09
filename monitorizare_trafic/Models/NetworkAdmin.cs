@@ -67,6 +67,15 @@ namespace monitorizare_trafic.Models
             }
         }
 
+        public List<EventReport> GetEventReports()
+        {
+            Manager manager = new Manager();
+            using (var context = manager.GetDataContext())
+            {
+                return context.GetTable<EventReport>().ToList();
+            }
+        }
+
 
 
         // Funcție pentru adăugarea unui utilizator
