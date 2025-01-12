@@ -107,12 +107,6 @@
                 <Button Content="Block Port" Style="{StaticResource ButtonStyle}" 
                         Margin="10" HorizontalAlignment="Stretch" 
                         Command="{Binding BlockPortCommand}"/>
-                <Button Content="Enable Protection" Style="{StaticResource ButtonStyle}" 
-                        Margin="10" HorizontalAlignment="Stretch" 
-                        Command="{Binding EnableProtectionCommand}"/>
-                <Button Content="Disable Protection" Style="{StaticResource ButtonStyle}" 
-                        Margin="10" HorizontalAlignment="Stretch" 
-                        Command="{Binding DisableProtectionCommand}"/>
             </StackPanel>
 
             <!-- Main Content Area -->

@@ -21,10 +21,12 @@ namespace monitorizare_trafic.Services
         public List<NetworkData> NetworkData = new List<NetworkData>();
         private int packetCount = 0;
         private ObservableCollection<NetworkData> trafficData = new ObservableCollection<NetworkData>();
+        private List<AddressListEntry> addressList = new List<AddressListEntry>();
 
         public void StartMonitoring()
         {
             var devices = CaptureDeviceList.Instance;
+            addressList=this.GetAddressListEntries();
 
             if (devices.Count < 1)
             {
@@ -64,10 +66,20 @@ namespace monitorizare_trafic.Services
 
                 var ipPacket = packet.Extract<IPPacket>();
                 if (ipPacket != null)
-                {
+                {   
                     string sourceIP = ipPacket.SourceAddress.ToString();
                     string destIP = ipPacket.DestinationAddress.ToString();
                     int packetSize = ipPacket.PayloadLength;
+
+                    foreach (AddressListEntry addr in addressList)
+                    {
+                        if (addr.Address.Equals(sourceIP) | addr.Address.Equals(destIP))
+                        {
+                            if (addr.ListType.Equals("Blacklist")) return;
+                        }
+
+                    }
+
                     packetCount++;
 
                     Analyzer.UpdateTrafficTrends(packetCount);
@@ -91,6 +103,9 @@ namespace monitorizare_trafic.Services
                     }
 
                     // Adaugă un nou obiect în colecția ObservableCollection
+
+                    
+
                     NetworkData packetData = new NetworkData
                     {
                         Id = packetCount,
@@ -128,6 +143,14 @@ namespace monitorizare_trafic.Services
             using (var context=_manager.GetDataContext())
             {
                 return context.GetTable<NetworkData>().ToList();
+            }
+        }
+
+        public List<AddressListEntry> GetAddressListEntries()
+        {
+            using(var context=_manager.GetDataContext())
+            {
+                return context.GetTable<AddressListEntry>().ToList();
             }
         }
 
