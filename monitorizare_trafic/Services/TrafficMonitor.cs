@@ -41,7 +41,7 @@ namespace monitorizare_trafic.Services
             }
 
           
-            _device = devices[10];
+            _device = devices[5];
             Console.WriteLine($"Using device: {_device.Description}");
 
             _device.OnPacketArrival += OnPacketArrival;

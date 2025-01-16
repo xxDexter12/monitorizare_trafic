@@ -140,14 +140,14 @@
                     <Image Source="/Images/Logo.png"
                            Width="100" Height="100"/>
 
-                    <TextBlock Text="RJ CODE"
+                    <TextBlock Text="IDS"
                              Foreground="White"
                              FontSize="25"
                              FontWeight="Medium"
                              FontFamily="Montserrat"
                              HorizontalAlignment="Center"/>
 
-                    <TextBlock Text="Learning to code is useful no matter what your career ambitions are."
+                    <TextBlock Text="Sistem de detectare și prevenire a atacurilor cibernetice"
                              Foreground="LightGray"
                              FontSize="12"
                              FontWeight="Medium"

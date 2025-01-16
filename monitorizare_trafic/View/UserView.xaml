@@ -174,40 +174,7 @@
                         <StackPanel Name="ReportEventPanel" Margin="10">
                           
                             <Grid Margin="0,0,0,10">
-                                <TextBox Text="{Binding ReportName, UpdateSourceTrigger=PropertyChanged}" 
-                     Background="#34495E" 
-                     Foreground="White" 
-                     Height="30" 
-                     Padding="5">
-                                    <TextBox.Style>
-                                        <Style TargetType="TextBox">
-                                            <Style.Triggers>
-                                                <Trigger Property="Text" Value="">
-                                                    <Setter Property="Tag" Value="Enter report name..."/>
-                                                </Trigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </TextBox.Style>
-                                    <TextBox.Template>
-                                        <ControlTemplate TargetType="TextBox">
-                                            <Border Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}">
-                                                <Grid>
-                                                    <TextBlock Text="{TemplateBinding Tag}" 
-                                           Foreground="Gray" 
-                                           Margin="5,0,0,0"
-                                           VerticalAlignment="Center"
-                                           Visibility="{Binding Text.IsEmpty, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource NullOrEmptyToVisibilityConverter}}"/>
-                                                    <ScrollViewer x:Name="PART_ContentHost" 
-                                            Focusable="false" 
-                                            HorizontalScrollBarVisibility="Hidden" 
-                                            VerticalScrollBarVisibility="Hidden"/>
-                                                </Grid>
-                                            </Border>
-                                        </ControlTemplate>
-                                    </TextBox.Template>
-                                </TextBox>
+                                
                             </Grid>
 
         
@@ -260,7 +227,40 @@
                                 <ComboBoxItem Content="5 (High)"/>
                             </ComboBox>
 
-                         
+                            <TextBox Text="{Binding ReportName, UpdateSourceTrigger=PropertyChanged}" 
+Background="#34495E" 
+Foreground="White" 
+Height="30" 
+Padding="5">
+                                <TextBox.Style>
+                                    <Style TargetType="TextBox">
+                                        <Style.Triggers>
+                                            <Trigger Property="Text" Value="">
+                                                <Setter Property="Tag" Value="Enter report name..."/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBox.Style>
+                                <TextBox.Template>
+                                    <ControlTemplate TargetType="TextBox">
+                                        <Border Background="{TemplateBinding Background}"
+           BorderBrush="{TemplateBinding BorderBrush}"
+           BorderThickness="{TemplateBinding BorderThickness}">
+                                            <Grid>
+                                                <TextBlock Text="{TemplateBinding Tag}" 
+                      Foreground="Gray" 
+                      Margin="5,0,0,0"
+                      VerticalAlignment="Center"
+                      Visibility="{Binding Text.IsEmpty, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource NullOrEmptyToVisibilityConverter}}"/>
+                                                <ScrollViewer x:Name="PART_ContentHost" 
+                       Focusable="false" 
+                       HorizontalScrollBarVisibility="Hidden" 
+                       VerticalScrollBarVisibility="Hidden"/>
+                                            </Grid>
+                                        </Border>
+                                    </ControlTemplate>
+                                </TextBox.Template>
+                            </TextBox>
                             <Grid Margin="0,10,0,10">
                                 <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
                      Background="#34495E"
