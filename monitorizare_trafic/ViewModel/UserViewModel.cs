@@ -22,15 +22,14 @@ namespace monitorizare_trafic.ViewModels
 
         public User CurrentUser { get; set; }
 
-        // Observable Collections for UI
+     
         public ObservableCollection<NetworkData> NetworkData { get; } = new ObservableCollection<NetworkData>();
         public ObservableCollection<AlertInfo> Alerts { get; } = new ObservableCollection<AlertInfo>();
 
-        // Chart Properties
         public ChartValues<int> PacketTrendValues { get; } = new ChartValues<int>();
         public List<string> TimeLabels { get; } = new List<string>();
 
-        // UI Visibility Properties
+     
         private Visibility _alertsPanelVisibility = Visibility.Collapsed;
         public Visibility AlertsPanelVisibility
         {
@@ -45,7 +44,7 @@ namespace monitorizare_trafic.ViewModels
             set => SetProperty(ref _mainContentVisibility, value);
         }
 
-        // Report Properties
+     
         private string _reportName = string.Empty;
         public string ReportName
         {
@@ -73,7 +72,7 @@ namespace monitorizare_trafic.ViewModels
             {
                 if (SetProperty(ref _selectedPriority, value))
                 {
-                    // Optional: Add any validation or additional logic when priority changes
+                   
                     OnPropertyChanged(nameof(IsValidPriority));
                 }
             }
@@ -87,7 +86,6 @@ namespace monitorizare_trafic.ViewModels
             set => SetProperty(ref _description, value);
         }
 
-        // Commands
         public ICommand StartMonitoringCommand { get; }
         public ICommand StopMonitoringCommand { get; }
         public ICommand NextPageCommand { get; }
@@ -104,7 +102,7 @@ namespace monitorizare_trafic.ViewModels
         {
             _trafficMonitor = new TrafficMonitor();
             _trafficMonitor.Analyzer = new TrafficAnalyzer();
-            // Initialize Commands
+          
             StartMonitoringCommand = new RelayCommand(_ => StartMonitoring());
             StopMonitoringCommand = new RelayCommand(_ => StopMonitoring());
             NextPageCommand = new RelayCommand(_ => NextPage(), _ => CanNavigateNext());
@@ -117,7 +115,7 @@ namespace monitorizare_trafic.ViewModels
             MinimizeCommand = new RelayCommand(_ => Application.Current.MainWindow.WindowState = WindowState.Minimized);
             CloseCommand = new RelayCommand(_ => Application.Current.Shutdown());
 
-            // Setup Event Handlers
+            
             _trafficMonitor.PacketCaptured += OnPacketCaptured;
             _trafficMonitor.Analyzer.AlertGenerated += OnAlertGenerated;
             _trafficMonitor.Analyzer.TrafficTrends.CollectionChanged += UpdateChart;
@@ -254,7 +252,7 @@ namespace monitorizare_trafic.ViewModels
         private void UpdatePagedData()
         {
             var pagedData = NetworkData.Skip((_currentPage - 1) * ItemsPerPage).Take(ItemsPerPage).ToList();
-            // Update UI bound collection here
+       
         }
 
         private void NextPage()

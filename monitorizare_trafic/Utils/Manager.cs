@@ -38,13 +38,13 @@ namespace monitorizare_trafic.Utils
             }
         }
 
-        // Metodă pentru a adăuga un utilizator
+      
         public void AddUser(User newUser)
         {
             using (var context = GetDataContext())
             {
                 context.GetTable<User>().InsertOnSubmit(newUser);
-                context.SubmitChanges(); // Salvează modificările în baza de date
+                context.SubmitChanges(); 
             }
         }
 
@@ -57,7 +57,7 @@ namespace monitorizare_trafic.Utils
             }
         }
 
-        // Metodă pentru a șterge un utilizator
+   
         public void RemoveUser(int userId)
         {
             using (var context = GetDataContext())
@@ -66,7 +66,7 @@ namespace monitorizare_trafic.Utils
                 if (userToRemove != null)
                 {
                     context.GetTable<User>().DeleteOnSubmit(userToRemove);
-                    context.SubmitChanges(); // Salvează modificările în baza de date
+                    context.SubmitChanges(); 
                 }
             }
         }

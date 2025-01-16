@@ -11,7 +11,7 @@ namespace monitorizare_trafic.Services
     {
         public void SaveActivities(List<SuspiciousActivity> activities)
         {
-            // Cod pentru salvarea activităților în baza de date
+            
         }
     }
 }

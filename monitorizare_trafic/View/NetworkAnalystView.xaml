@@ -18,14 +18,14 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Top Panel - Filters and Commands -->
+        
         <Grid Grid.Row="0" Margin="0,0,0,10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <!-- Filters -->
+           
             <StackPanel Grid.Column="0" Orientation="Horizontal">
                 <TextBlock Text="From:" VerticalAlignment="Center" Margin="0,0,5,0"/>
                 <DatePicker SelectedDate="{Binding StartDate}" Margin="0,0,10,0"/>
@@ -33,7 +33,7 @@
                 <DatePicker SelectedDate="{Binding EndDate}" Margin="0,0,10,0"/>
             </StackPanel>
 
-            <!-- Command Buttons -->
+           
             <StackPanel Grid.Column="1" Orientation="Horizontal">
                 <Button Content="Refresh" Command="{Binding RefreshDataCommand}" 
                         Margin="5,0" Padding="10,5"/>
@@ -44,14 +44,14 @@
             </StackPanel>
         </Grid>
 
-        <!-- Main Content -->
+        
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <!-- Left Panel - Reports -->
+           
             <GroupBox Grid.Column="0" Header="Network Reports" Margin="0,0,5,0">
                 <DataGrid ItemsSource="{Binding Reports}"
                          SelectedItem="{Binding SelectedReport}"
@@ -69,7 +69,7 @@
                 </DataGrid>
             </GroupBox>
 
-            <!-- Right Panel - Network Data and Analysis -->
+           
             <Grid Grid.Column="1" Margin="5,0,0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="7*"/>
@@ -81,7 +81,7 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <!-- Packet Data Panel -->
+               
                 <GroupBox Grid.Row="0" Header="Network Packet Data" Grid.ColumnSpan="2" Margin="0,0,0,360" Grid.RowSpan="2">
                     <DataGrid ItemsSource="{Binding PacketData}"
           SelectionMode="Extended"
@@ -107,7 +107,7 @@
                     </DataGrid>
                 </GroupBox>
 
-                <!-- Suspicious Packets Panel -->
+                
                 <GroupBox Grid.Row="1" Header="Suspicious Packets" Grid.ColumnSpan="2">
                     <DataGrid ItemsSource="{Binding SuspiciousPackets}"
                 AutoGenerateColumns="False"
@@ -124,7 +124,7 @@
                     </DataGrid>
                 </GroupBox>
 
-                <!-- Buttons -->
+              
                 <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,5,0,0" Grid.Column="1">
 
                 </StackPanel>

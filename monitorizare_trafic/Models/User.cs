@@ -7,19 +7,19 @@ using System.Threading.Tasks;
 
 namespace monitorizare_trafic.Models
 {
-    [Table(Name = "Users")] // Atributul pentru a mapa la tabela "Users" din baza de date
+    [Table(Name = "Users")]
     public class User
     {
-        [Column(IsPrimaryKey = true, IsDbGenerated = true)] // Coloana primară generată automat
+        [Column(IsPrimaryKey = true, IsDbGenerated = true)] 
         public int UserId { get; set; }
 
-        [Column] // Coloana "UserName"
+        [Column] 
         public string Username { get; set; }
 
-        [Column] // Coloana "PasswordHash"
+        [Column] 
         public string Password { get; set; }
 
-        [Column] // Coloana "Role"
+        [Column] 
         public string Role { get; set; }
 
         [Column]

@@ -11,7 +11,7 @@ namespace monitorizare_trafic.Services
     {
         public void SendNotification(SuspiciousActivity activity)
         {
-            // Cod pentru trimiterea notificării
+           
         }
     }
 }

@@ -3,25 +3,25 @@ using System.Data.Linq.Mapping;
 
 namespace monitorizare_trafic.Models
 {
-    [Table(Name = "NetworkData")] // Atributul pentru a mapa la tabela "NetworkData" din baza de date
+    [Table(Name = "NetworkData")] 
     public class NetworkData
     {
-        [Column(IsPrimaryKey = true, IsDbGenerated = true)] // Coloana primară generată automat
+        [Column(IsPrimaryKey = true, IsDbGenerated = true)] 
         public int Id { get; set; }
 
-        [Column] // Coloana "SourceIP"
+        [Column] 
         public string SourceIP { get; set; }
 
-        [Column] // Coloana "DestinationIP"
+        [Column] 
         public string DestinationIP { get; set; }
 
-        [Column] // Coloana "DataSize"
+        [Column] 
         public int DataSize { get; set; }
 
-        [Column] // Coloana "Port"
+        [Column] 
         public int Port { get; set; }
 
-        [Column] // Coloana "Timestamp"
-        public DateTime Timestamp { get; set; } = DateTime.Now; // Setează valoarea implicită la data și ora curentă
+        [Column] 
+        public DateTime Timestamp { get; set; } = DateTime.Now; 
     }
 }

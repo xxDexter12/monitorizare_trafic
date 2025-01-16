@@ -29,16 +29,16 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Header -->
+ 
         <Grid Grid.Row="0" Background="#2C3E50" Height="60">
-            <!-- Button Row -->
+      
             <Grid HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,10,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- Minimize Button -->
+       
                 <Button x:Name="btnMinimize" BorderThickness="0" Content="-" Foreground="White"
                         FontSize="16" FontFamily="Montserrat" Cursor="Hand" Grid.Column="0" 
                         Command="{Binding MinimizeCommand}">
@@ -61,7 +61,6 @@
                     </Button.Template>
                 </Button>
 
-                <!-- Close Button -->
                 <Button x:Name="btnClose" BorderThickness="0" Content="X" Foreground="White"
                         FontSize="12" FontFamily="Montserrat" Cursor="Hand" Grid.Column="1" 
                         Command="{Binding CloseCommand}">
@@ -91,14 +90,13 @@
             </TextBlock>
         </Grid>
 
-        <!-- Main Content Section -->
+   
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="250"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <!-- Sidebar -->
             <StackPanel Background="#34495E" VerticalAlignment="Stretch">
                 <Button Content="Start Monitoring" Style="{StaticResource ButtonStyle}" 
                         Margin="10" HorizontalAlignment="Stretch" 
@@ -111,7 +109,7 @@
                         Command="{Binding ShowAlertsCommand}"/>
             </StackPanel>
 
-            <!-- Main Content Area -->
+   
             <Grid Grid.Column="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="187*"/>
@@ -174,7 +172,7 @@
 
                     <TabItem Header="Report Event">
                         <StackPanel Name="ReportEventPanel" Margin="10">
-                            <!-- Report Name with Placeholder -->
+                          
                             <Grid Margin="0,0,0,10">
                                 <TextBox Text="{Binding ReportName, UpdateSourceTrigger=PropertyChanged}" 
                      Background="#34495E" 
@@ -212,7 +210,7 @@
                                 </TextBox>
                             </Grid>
 
-                            <!-- Event Category -->
+        
                             <TextBlock Text="Event Category:" 
                   FontSize="14" 
                   Foreground="White" 
@@ -237,7 +235,7 @@
                                 <ComboBoxItem Content="Other"/>
                             </ComboBox>
 
-                            <!-- Priority Level -->
+        
                             <TextBlock Text="Priority Level:" 
                   FontSize="14" 
                   Foreground="White" 
@@ -262,7 +260,7 @@
                                 <ComboBoxItem Content="5 (High)"/>
                             </ComboBox>
 
-                            <!-- Description with Placeholder -->
+                         
                             <Grid Margin="0,10,0,10">
                                 <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
                      Background="#34495E"
@@ -302,7 +300,7 @@
                                 </TextBox>
                             </Grid>
 
-                            <!-- Submit Button -->
+                       
                             <Button Content="Submit Report" 
                 Style="{StaticResource ButtonStyle}"
                 Margin="0,20,0,0" 
@@ -311,7 +309,7 @@
                     </TabItem>
                 </TabControl>
 
-                <!-- Alerts Panel -->
+             
                 <StackPanel Visibility="{Binding AlertsPanelVisibility}" Grid.ColumnSpan="2">
                     <TextBlock Text="Alerts" FontSize="18" FontWeight="Bold" 
                              Foreground="White" Margin="10"/>

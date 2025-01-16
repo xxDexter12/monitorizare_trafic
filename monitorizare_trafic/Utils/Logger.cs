@@ -10,7 +10,7 @@ namespace monitorizare_trafic.Utils
     {
         public void Log(string message)
         {
-            // Cod pentru logarea mesajelor
+            
         }
     }
 }

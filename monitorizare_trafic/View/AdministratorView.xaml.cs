@@ -17,7 +17,7 @@ namespace monitorizare_trafic.View
             DataContext = _viewModel;
         }
 
-        // Only window-specific functionality remains in code-behind
+
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
         {
             base.OnMouseLeftButtonDown(e);

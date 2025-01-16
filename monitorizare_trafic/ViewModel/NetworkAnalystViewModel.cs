@@ -7,7 +7,6 @@ using monitorizare_trafic.Models;
 using System.Windows;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-//using Microsoft.EntityFrameworkCore;
 using monitorizare_trafic.Services;
 using System.Text;
 using System.Data.Linq;
@@ -21,8 +20,7 @@ namespace monitorizare_trafic.ViewModels
         public User CurrentUser { get; set; }
         private readonly TrafficMonitor _context;
         private readonly NetworkAnalyst _networkAnalyst;
-        // Collections for data display
-        private ObservableCollection<Report> _reports;
+                private ObservableCollection<Report> _reports;
         public ObservableCollection<Report> Reports
         {
             get => _reports;
@@ -34,8 +32,7 @@ namespace monitorizare_trafic.ViewModels
         }
         public ObservableCollection<NetworkData> PacketData { get; } = new ObservableCollection<NetworkData>();
 
-        // Selected items
-        private Report _selectedReport;
+                private Report _selectedReport;
         public Report SelectedReport
         {
             get => _selectedReport;
@@ -46,8 +43,7 @@ namespace monitorizare_trafic.ViewModels
             }
         }
 
-        // Filters
-        private DateTime _startDate = DateTime.Now.AddDays(-7);
+                private DateTime _startDate = DateTime.Now.AddDays(-7);
         public DateTime StartDate
         {
             get => _startDate;
@@ -69,8 +65,7 @@ namespace monitorizare_trafic.ViewModels
             }
         }
 
-        // Commands
-        public ICommand ExportDataCommand { get; }
+                public ICommand ExportDataCommand { get; }
         public ICommand AnalyzePacketsCommand { get; }
         public ICommand GenerateReportCommand { get; }
         public ICommand RefreshDataCommand { get; }
@@ -81,20 +76,17 @@ namespace monitorizare_trafic.ViewModels
             _manager = new Manager();
             _networkAnalyst = new NetworkAnalyst();
             SuspiciousPackets = new ObservableCollection<NetworkData>();
-            // Initialize commands
-            ExportDataCommand = new RelayCommand(ExportData);
+                        ExportDataCommand = new RelayCommand(ExportData);
             AnalyzePacketsCommand = new RelayCommand(AnalyzePackets);
             GenerateReportCommand = new RelayCommand(GenerateReport);
-            //RefreshDataCommand = new RelayCommand(async _ => await LoadData());
-
+            
             _selectedPackets = new List<NetworkData>();
             AddToSuspiciousCommand = new RelayCommand(AddToSuspicious, CanAddToSuspicious);
             _context = new TrafficMonitor();
             _networkAnalyst = new NetworkAnalyst();
             SuspiciousPackets = new ObservableCollection<NetworkData>();
 
-            // Initial data load
-            LoadData();
+                        LoadData();
         }
 
 
@@ -125,8 +117,7 @@ namespace monitorizare_trafic.ViewModels
         {
             try
             {
-                // Load Reports and filter out those without packets
-                var reportList = _networkAnalyst.GetReports()
+                                var reportList = _networkAnalyst.GetReports()
                     .Where(report => HasPacketsForReport(report))
                     .ToList();
                 Reports = new ObservableCollection<Report>(reportList);
@@ -177,8 +168,7 @@ namespace monitorizare_trafic.ViewModels
 
         private void ExportData(object parameter)
         {
-            // TODO: Implement export functionality for reports and packet data
-            MessageBox.Show("Export functionality not implemented yet.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                        MessageBox.Show("Export functionality not implemented yet.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void AnalyzePackets(object parameter)
@@ -197,9 +187,7 @@ namespace monitorizare_trafic.ViewModels
                     .OrderByDescending(g => g.Count())
                     .Take(5)
                     .ToDictionary(g => g.Key, g => g.Count()),
-                //ProtocolDistribution = PacketData.GroupBy(p => p.Protocol)
-                //    .ToDictionary(g => g.Key, g => g.Count())
-            };
+                                            };
 
             MessageBox.Show($"Analysis Complete!\n" +
                           $"Total Packets: {analysis.TotalPackets}\n" +
@@ -231,27 +219,22 @@ namespace monitorizare_trafic.ViewModels
 
             try
             {
-                // Use the existing suspicious packets instead of analyzing again
-                var suspiciousPacketsList = SuspiciousPackets.ToList();
+                                var suspiciousPacketsList = SuspiciousPackets.ToList();
 
-                // Create the event report using actual suspicious packets from the UI
-                var eventReport = new EventReport
+                                var eventReport = new EventReport
                 {
                     ReportId = SelectedReport.ReportId,
                     AnalystComments = GenerateAnalysisContent(PacketData.ToList(), suspiciousPacketsList),
-                    // Convert suspicious packets to the required format
-                    SuspiciousPackets = string.Join(",", suspiciousPacketsList.Select(p =>
+                                        SuspiciousPackets = string.Join(",", suspiciousPacketsList.Select(p =>
                         $"{p.SourceIP}->{p.DestinationIP}:{p.Port}:{p.DataSize}")),
                     CreatedDate = DateTime.Now,
                     AnalystId = CurrentUser?.UserId ?? 0
                 };
 
-                // Save to database
-                _manager.AddEventReport(eventReport);
+                                _manager.AddEventReport(eventReport);
                 _manager.UpdateReportStatus(SelectedReport.ReportId, "Resolved");
 
-                // Reload data
-                LoadData();
+                                LoadData();
 
                 MessageBox.Show("Raport generat și salvat cu succes!",
                     "Succes", MessageBoxButton.OK, MessageBoxImage.Information);

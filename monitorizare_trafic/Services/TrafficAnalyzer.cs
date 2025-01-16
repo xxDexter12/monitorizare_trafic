@@ -28,7 +28,7 @@ namespace monitorizare_trafic.Services
                 PacketCount = packetCount
             });
 
-            // Optionally, clean old trends
+       
             while (_trafficTrends.Count > 0 &&
                    _trafficTrends[0].Timestamp < DateTime.Now.AddMinutes(-10))
             {
@@ -76,10 +76,10 @@ namespace monitorizare_trafic.Services
             {
                 var alert = $"Potential host scan detected from {srcIP} to {destIP}. Scan type: Port scan.";
 
-                // Adăugăm alerta în colecția ObservableCollection
+                
                 App.Current.Dispatcher.Invoke(() =>
                 {
-                    Alerts.Add(alert); // Modificăm ObservableCollection
+                    Alerts.Add(alert); 
                 });
 
                 AlertGenerated.Invoke(alert);

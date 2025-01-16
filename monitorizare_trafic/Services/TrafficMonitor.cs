@@ -40,8 +40,7 @@ namespace monitorizare_trafic.Services
 
             }
 
-            //momentan lasam device 10 ca ala merge la mine pe laptop, de adaugat la monitorizare
-            //abilitatea sa schimbi device-ul
+          
             _device = devices[10];
             Console.WriteLine($"Using device: {_device.Description}");
 
@@ -102,7 +101,7 @@ namespace monitorizare_trafic.Services
                         Task.Run(() => Analyzer.AddScanAttempt(sourceIP, destIP, destPort));
                     }
 
-                    // Adaugă un nou obiect în colecția ObservableCollection
+                 
 
                     
 
@@ -117,7 +116,7 @@ namespace monitorizare_trafic.Services
 
                     _manager.AddNetworkData(packetData);
 
-                    // Trimite evenimentul
+                   
                     PacketCaptured?.Invoke(packetData);
 
                     //Console.WriteLine($"Packet captured: {sourceIP} -> {destIP}, Size: {packetSize} bytes");

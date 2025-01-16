@@ -16,7 +16,7 @@ namespace monitorizare_trafic.View
 
         private void btnDelete_Click(object sender, RoutedEventArgs e)
         {
-            // Căutăm utilizatorul în baza de date
+         
             Manager manager = new Manager();
             DataContext db = manager.GetDataContext();
             var userToDelete = db.GetTable<User>().FirstOrDefault(u => u.Username == txtUsername.Text);

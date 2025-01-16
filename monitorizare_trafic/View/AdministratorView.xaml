@@ -28,7 +28,6 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Header -->
         <Grid Grid.Row="0" Background="#2C3E50" Height="60">
             <Grid HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,10,0">
                 <Grid.ColumnDefinitions>
@@ -36,7 +35,6 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- Minimize Button -->
                 <Button x:Name="btnMinimize" BorderThickness="0" Content="-" Foreground="White"
                         FontSize="16" FontFamily="Montserrat" Cursor="Hand" Grid.Column="0" 
                         Command="{Binding MinimizeCommand}">
@@ -59,7 +57,7 @@
                     </Button.Template>
                 </Button>
 
-                <!-- Close Button -->
+               
                 <Button x:Name="btnClose" BorderThickness="0" Content="X" Foreground="White"
                         FontSize="12" FontFamily="Montserrat" Cursor="Hand" Grid.Column="1" 
                         Command="{Binding CloseCommand}">
@@ -89,14 +87,14 @@
             </TextBlock>
         </Grid>
 
-        <!-- Main Content Section -->
+ 
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="250"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <!-- Sidebar -->
+        
             <StackPanel Background="#34495E" VerticalAlignment="Stretch">
                 <Button Content="View Users" Style="{StaticResource ButtonStyle}" 
                         Margin="10" HorizontalAlignment="Stretch" 
@@ -109,7 +107,7 @@
                         Command="{Binding BlockPortCommand}"/>
             </StackPanel>
 
-            <!-- Main Content Area -->
+       
             <Grid Grid.Column="1">
                 <TabControl x:Name="TabControl">
                     <TabItem Header="User Management">
@@ -133,7 +131,7 @@
                     <TabItem Header="Network Management">
                         <ScrollViewer>
                             <StackPanel Name="NetworkManagementPanel" Margin="10">
-                                <!-- Active Ports Section -->
+                             
                                 <GroupBox Header="Active Ports" Margin="0,0,0,10">
                                     <DataGrid ItemsSource="{Binding ActivePorts}" 
                          AutoGenerateColumns="False" 
@@ -149,7 +147,7 @@
                                     </DataGrid>
                                 </GroupBox>
 
-                                <!-- Network Rules Section -->
+                              
                                 <GroupBox Header="Network Rules" Margin="0,0,0,10">
                                     <Grid>
                                         <Grid.RowDefinitions>
@@ -183,7 +181,7 @@
                     <TabItem Header="Protection Settings">
                         <ScrollViewer>
                             <StackPanel Name="ProtectionSettingsPanel" Margin="10">
-                                <!-- Whitelist Section -->
+                              
                                 <GroupBox Header="Whitelist" Margin="0,0,0,10">
                                     <Grid>
                                         <Grid.RowDefinitions>
@@ -191,7 +189,7 @@
                                             <RowDefinition Height="*"/>
                                         </Grid.RowDefinitions>
 
-                                        <!-- Input Section for Whitelist -->
+                                      
                                         <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="5">
                                              <Grid Margin="5">
         <TextBox x:Name="WhitelistTextBox"
@@ -216,7 +214,7 @@
                                 Margin="5,0,0,0"/>
                                         </StackPanel>
 
-                                        <!-- DataGrid for Whitelist -->
+                                       
                                         <DataGrid Grid.Row="1"
                               ItemsSource="{Binding WhitelistedAddresses}"
                               SelectedItem="{Binding SelectedWhitelistedAddress}"
@@ -232,7 +230,7 @@
                                     </Grid>
                                 </GroupBox>
 
-                                <!-- Blacklist Section -->
+                               
                                 <GroupBox Header="Blacklist" Margin="0,0,0,10">
                                     <Grid>
                                         <Grid.RowDefinitions>
@@ -240,7 +238,7 @@
                                             <RowDefinition Height="*"/>
                                         </Grid.RowDefinitions>
 
-                                        <!-- Input Section for Blacklist -->
+                                        
                                         <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="5">
                                             <Grid Margin="5">
                                                 <TextBox x:Name="BlacklistTextBox"
@@ -264,7 +262,7 @@
                                 Margin="5,0,0,0"/>
                                         </StackPanel>
 
-                                        <!-- DataGrid for Blacklist -->
+                                     
                                         <DataGrid Grid.Row="1"
                               ItemsSource="{Binding BlacklistedAddresses}"
                               SelectedItem="{Binding SelectedBlacklistedAddress}"

@@ -14,19 +14,19 @@ namespace monitorizare_trafic.Models
         [Column(IsPrimaryKey = true, IsDbGenerated = true)]
         public int ReportId { get; set; }
         [Column]
-        public string Title { get; set; } // Numele raportului
+        public string Title { get; set; } 
         [Column]
         public string Description { get; set; }
         [Column]
-        public string Category { get; set; } // Categoria
+        public string Category { get; set; } 
         [Column]
-        public DateTime CreatedDate { get; set; } // Data evenimentului
+        public DateTime CreatedDate { get; set; }
         [Column]
         public int CreatedBy { get; set; }
         [Column]
         public string Status {  get; set; }
         [Column]
-        public int Priority { get; set; } // Nivelul de prioritate (1-5)
+        public int Priority { get; set; } 
         
     }
 

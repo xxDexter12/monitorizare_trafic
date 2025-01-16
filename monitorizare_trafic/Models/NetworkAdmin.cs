@@ -36,19 +36,19 @@ namespace monitorizare_trafic.Models
             }
         }
 
-        // Funcție pentru vizualizarea tuturor utilizatorilor
+  
         public List<User> GetUsers()
         {
             return _manager.GetAllUsers();
         }
         public ObservableCollection<NetworkPort> GetActivePorts()
         {
-            // Simulate getting active ports - replace with actual implementation
+  
             return new ObservableCollection<NetworkPort>
         {
             new NetworkPort { PortNumber = 80, Status = "Open", Service = "HTTP", Protocol = "TCP" },
             new NetworkPort { PortNumber = 443, Status = "Open", Service = "HTTPS", Protocol = "TCP" },
-            // Add more ports as needed
+
         };
         }
         public void RemoveAddressFromList(AddressListEntry entry)
@@ -78,38 +78,38 @@ namespace monitorizare_trafic.Models
 
 
 
-        // Funcție pentru adăugarea unui utilizator
+    
         public void AddUser(User newUser)
         {
             _manager.AddUser(newUser);
             Console.WriteLine("Utilizatorul a fost adăugat în baza de date.");
         }
 
-        // Funcție pentru ștergerea unui utilizator
+     
         public void RemoveUser(int userId)
         {
             _manager.RemoveUser(userId);
             Console.WriteLine("Utilizatorul a fost șters din baza de date.");
         }
 
-        // Funcție pentru blocarea unui port
+     
         public void BlockPort(int portNumber)
         {
-            // Logica pentru blocarea portului
+
             Console.WriteLine($"Portul {portNumber} a fost blocat.");
         }
 
-        // Funcție pentru activarea protecției
+ 
         public void EnableProtection()
         {
-            // Logica pentru activarea protecției
+
             Console.WriteLine("Sistemul de protecție a fost activat.");
         }
 
-        // Funcție pentru dezactivarea protecției
+
         public void DisableProtection()
         {
-            // Logica pentru dezactivarea protecției
+
             Console.WriteLine("Sistemul de protecție a fost dezactivat.");
         }
     }

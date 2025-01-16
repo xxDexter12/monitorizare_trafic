@@ -9,7 +9,7 @@ namespace monitorizare_trafic.Models
     public class NetworkPort
     {
         public int PortNumber { get; set; }
-        public string Status { get; set; }  // Open, Closed, Blocked
+        public string Status { get; set; }  
         public string Service { get; set; }
         public string Protocol { get; set; } // TCP/UDP
     }

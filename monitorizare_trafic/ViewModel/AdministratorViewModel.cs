@@ -64,7 +64,7 @@ namespace monitorizare_trafic.ViewModel
         {
             _networkAdmin = new NetworkAdmin();
 
-            // Initialize commands
+        
             ViewUsersCommand = new RelayCommand(LoadUsers);
             AddUserCommand = new RelayCommand(AddUser);
             RemoveUserCommand = new RelayCommand(RemoveUser, CanRemoveUser);
@@ -81,13 +81,13 @@ namespace monitorizare_trafic.ViewModel
             BlacklistedAddresses = new ObservableCollection<AddressListEntry>(_networkAdmin.GetAddresses("Blacklist"));
             ViewEventReportsCommand = new RelayCommand(LoadEventReports);
 
-            // Inițializează comenzile
+         
             AddToWhitelistCommand = new RelayCommand(AddToWhitelist);
             AddToBlacklistCommand = new RelayCommand(AddToBlacklist);
             RemoveFromWhitelistCommand = new RelayCommand(RemoveFromWhitelist, CanRemoveFromWhitelist);
             RemoveFromBlacklistCommand = new RelayCommand(RemoveFromBlacklist, CanRemoveFromBlacklist);
 
-            // Load users initially
+            
             LoadUsers();
         }
 
@@ -260,7 +260,7 @@ namespace monitorizare_trafic.ViewModel
                 var entry = new AddressListEntry
                 {
                     Address = NewWhitelistAddress,
-                    Type = "IP Address", // Sau "Domain" dacă e cazul
+                    Type = "IP Address", 
                     ListType = "Whitelist",
                     DateAdded = DateTime.Now
                 };
@@ -268,7 +268,7 @@ namespace monitorizare_trafic.ViewModel
                 _networkAdmin.AddAddressToList(entry);
                 WhitelistedAddresses.Add(entry);
 
-                // Golește câmpul TextBox
+                
                 NewWhitelistAddress = string.Empty;
 
                 MessageBox.Show("Address added to whitelist.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -292,7 +292,7 @@ namespace monitorizare_trafic.ViewModel
                 var entry = new AddressListEntry
                 {
                     Address = NewBlacklistAddress,
-                    Type = "IP Address", // Sau "Domain" dacă e cazul
+                    Type = "IP Address",
                     ListType = "Blacklist",
                     DateAdded = DateTime.Now
                 };
@@ -300,7 +300,7 @@ namespace monitorizare_trafic.ViewModel
                 _networkAdmin.AddAddressToList(entry);
                 BlacklistedAddresses.Add(entry);
 
-                // Golește câmpul TextBox
+              
                 NewBlacklistAddress = string.Empty;
 
                 MessageBox.Show("Address added to blacklist.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -325,10 +325,10 @@ namespace monitorizare_trafic.ViewModel
             {
                 try
                 {
-                    // Elimină din baza de date
+                   
                     _networkAdmin.RemoveAddressFromList(SelectedWhitelistedAddress);
 
-                    // Elimină din colecția locală
+                   
                     WhitelistedAddresses.Remove(SelectedWhitelistedAddress);
 
                     MessageBox.Show("Address removed from whitelist.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -354,10 +354,10 @@ namespace monitorizare_trafic.ViewModel
             {
                 try
                 {
-                    // Elimină din baza de date
+                   
                     _networkAdmin.RemoveAddressFromList(SelectedBlacklistedAddress);
 
-                    // Elimină din colecția locală
+                  
                     BlacklistedAddresses.Remove(SelectedBlacklistedAddress);
 
                     MessageBox.Show("Address removed from blacklist.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);

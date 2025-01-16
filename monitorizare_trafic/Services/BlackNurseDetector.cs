@@ -33,7 +33,7 @@ namespace monitorizare_trafic.Services
                 if (_icmplogs[sourceIp].Count>=DetectionThreshold)
                 {
                     Console.WriteLine($"BlackNurse attack detected from {sourceIp}!");
-                    //TODO ADAUGA ALERTA
+                   
 
                 }
 

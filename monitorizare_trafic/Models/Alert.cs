@@ -3,25 +3,25 @@ using System.Data.Linq.Mapping;
 
 namespace monitorizare_trafic.Models
 {
-    [Table(Name = "Alerts")] // Atributul pentru a mapa la tabela "Alerts" din baza de date
+    [Table(Name = "Alerts")] 
     public class Alert
     {
-        [Column(IsPrimaryKey = true, IsDbGenerated = true)] // Coloana primară generată automat
+        [Column(IsPrimaryKey = true, IsDbGenerated = true)] 
         public int AlertID { get; set; }
 
-        [Column] // Coloana "Timestamp"
-        public DateTime Timestamp { get; set; } = DateTime.Now; // Setează valoarea implicită la data și ora curentă
+        [Column] 
+        public DateTime Timestamp { get; set; } = DateTime.Now; 
 
-        [Column] // Coloana "TrafficID"
+        [Column]
         public int TrafficID { get; set; }
 
-        [Column] // Coloana "AlertType"
+        [Column] 
         public string AlertType { get; set; }
 
-        [Column] // Coloana "Message"
+        [Column]
         public string Message { get; set; }
 
-        [Column] // Coloana "Resolved"
-        public bool Resolved { get; set; } = false; // Valoare implicită la false
+        [Column]
+        public bool Resolved { get; set; } = false;
     }
 }

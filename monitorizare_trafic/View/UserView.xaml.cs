@@ -12,7 +12,7 @@ namespace monitorizare_trafic.View
         {
             InitializeComponent();
 
-            // Create and set the ViewModel
+          
             _viewModel = new UserViewModel();
             _viewModel.CurrentUser = user;
             DataContext = _viewModel;
